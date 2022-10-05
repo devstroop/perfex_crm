@@ -10,7 +10,16 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Copy repository contents via scp
+    - name: Cleanup
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        PORT: ${{ secrets.PORT }}
+        script: sudo RM -R /var/www/html
+        
+    - name: Copy via scp
       uses: appleboy/scp-action@master
       env:
         HOST: ${{ secrets.HOST }}
@@ -18,14 +27,14 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         PORT: ${{ secrets.PORT }}
       with:
-        source: "."
+        source: "./perfex_crm"
         target: "/var/www/html"
 
-    - name: Executing remote command
+    - name: Listing
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
         PORT: ${{ secrets.PORT }}
-        script: ls
+        script: cd /var/www/html && ls
