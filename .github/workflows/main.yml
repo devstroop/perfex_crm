@@ -27,7 +27,7 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         PORT: ${{ secrets.PORT }}
       with:
-        source: "./perfex_crm"
+        source: "./perfex_crm/"
         target: "/var/www/html"
 
     - name: Listing
