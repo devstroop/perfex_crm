@@ -30,6 +30,15 @@ jobs:
         source: "./perfex_crm/."
         target: "/var/www/html/"
 
+    - name: Move 
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        PORT: ${{ secrets.PORT }}
+        script: sudo mv /var/www/html/perfex_crm/* /var/www/html/ && sudo rm -r /var/www/html/perfex_crm
+        
     - name: Listing
       uses: appleboy/ssh-action@master
       with:
