@@ -19,7 +19,7 @@ jobs:
         PORT: ${{ secrets.PORT }}
         script: sudo rm -r /var/www/html
         
-    - name: Copy via scp
+    - name: Deploy
       uses: appleboy/scp-action@master
       env:
         HOST: ${{ secrets.HOST }}
@@ -38,6 +38,15 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         PORT: ${{ secrets.PORT }}
         script: sudo mv /var/www/html/perfex_crm/* /var/www/html/ && sudo rm -r /var/www/html/perfex_crm
+        
+    - name: Permission setup 
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        PORT: ${{ secrets.PORT }}
+        script: cd /var/www/html && sudo chmod 0755 uploads/proposals && chmod 0755 uploads/estimates
         
     - name: Listing
       uses: appleboy/ssh-action@master
