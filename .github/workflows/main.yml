@@ -27,8 +27,8 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         PORT: ${{ secrets.PORT }}
       with:
-        source: "./perfex_crm/*"
-        target: "/var/www/html"
+        source: "./perfex_crm/"
+        target: "/var/www/html/"
 
     - name: Listing
       uses: appleboy/ssh-action@master
