@@ -16,7 +16,15 @@ jobs:
         php-version: '8.0'
     - name: Install dependencies
       run: composer install --no-dev
-    - name: Deploy to VPS
+    - name: Upload
+      uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: './'
+          target: '/var/www/html'
+    - name: Deploy
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -25,7 +33,6 @@ jobs:
         script: |
           cd /var/www/html
           rm -rf *
-          git clone https://github.com/USERNAME/REPO.git .
           composer install --no-dev
           chown -R www-data:www-data *
           service apache2 restart
