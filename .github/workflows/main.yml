@@ -14,19 +14,26 @@ jobs:
       uses: shivammathur/setup-php@v1
       with:
         php-version: '8.0'
+      catch:
+        - failure
 
     - name: Install dependencies
       run: composer install --no-dev
-    - name: Upload
+      catch:
+        - failure
+
+    - name: Upload files to server
       uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          source: './'
-          target: '/var/www/html'
-          
-    - name: Deploy
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        source: './'
+        target: '/var/www/html'
+      catch:
+        - failure
+
+    - name: Deploy and restart Apache
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -38,3 +45,5 @@ jobs:
           composer install --no-dev
           chown -R www-data:www-data *
           service apache2 restart
+      catch:
+        - failure
