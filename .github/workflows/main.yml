@@ -25,7 +25,7 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
         password: ${{ secrets.VPS_PASSWORD }}
-        source: './perfex_crm'
+        source: './'
         target: '/var/www/html'
           
     - name: Initialize
