@@ -19,7 +19,7 @@ jobs:
           cd /var/www/html
           rm -rf *
           git init
-          git remote add origin https://devstroop:TOKEN@github.com/devstroop/perfex_crm.git
+          git remote add origin https://devstroop:{{ secrets.GIT_TOKEN }}@github.com/devstroop/perfex_crm.git
           git pull
           composer install --no-dev
           chown -R www-data:www-data *
