@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Flush server directory
+    - name: Deploy
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -18,24 +18,10 @@ jobs:
         script: |
           cd /var/www/html
           rm -rf *
-
-    - name: Upload files to server
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
-        password: ${{ secrets.VPS_PASSWORD }}
-        source: './'
-        target: '/var/www/html'
-
-    - name: Install dependencies and restart Apache
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
-        password: ${{ secrets.VPS_PASSWORD }}
-        script: |
-          cd /var/www/html
+          git init
+          git remote add origin https://devstroop:TOKEN@github.com/devstroop/perfex_crm.git
+          git pull
           composer install --no-dev
           chown -R www-data:www-data *
           service apache2 restart
+
