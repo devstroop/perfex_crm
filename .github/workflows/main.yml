@@ -18,8 +18,6 @@ jobs:
         script: |
           cd /var/www/html
           rm -rf *
-      catch:
-        - failure
 
     - name: Upload files to server
       uses: appleboy/scp-action@v1
@@ -29,8 +27,6 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}
         source: './'
         target: '/var/www/html'
-      catch:
-        - failure
 
     - name: Install dependencies and restart Apache
       uses: appleboy/ssh-action@master
@@ -43,5 +39,3 @@ jobs:
           composer install --no-dev
           chown -R www-data:www-data *
           service apache2 restart
-      catch:
-        - failure
