@@ -20,7 +20,7 @@ jobs:
           rm -rf *
 
     - name: Upload files to server
-      uses: appleboy/scp-action@v1
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
