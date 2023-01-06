@@ -1,58 +1,31 @@
-name: Deploy
+name: Deploy PHP App
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-
-    - name: Cleanup
+    - uses: actions/checkout@v2
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v1
+      with:
+        php-version: '7.3'
+    - name: Install dependencies
+      run: composer install --no-dev
+    - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PORT: ${{ secrets.PORT }}
-        script: sudo rm -r /var/www/html
-        
-    - name: Deploy
-      uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PORT: ${{ secrets.PORT }}
-      with:
-        source: "./perfex_crm/."
-        target: "/var/www/html/"
-
-    - name: Move 
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PORT: ${{ secrets.PORT }}
-        script: sudo mv /var/www/html/perfex_crm/* /var/www/html/ && sudo rm -r /var/www/html/perfex_crm
-        
-    - name: Permission setup 
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PORT: ${{ secrets.PORT }}
-        script: cd /var/www/html && sudo chmod 0755 uploads/proposals && chmod 0755 uploads/estimates
-        
-    - name: Listing
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PORT: ${{ secrets.PORT }}
-        script: cd /var/www/html && ls
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        script: |
+          cd /var/www/html
+          rm -rf *
+          git clone https://github.com/USERNAME/REPO.git .
+          composer install --no-dev
+          chown -R www-data:www-data *
+          service apache2 restart
