@@ -82,8 +82,6 @@ class TicketsReportByStaff
                     '(SELECT count(ticketid) from ' . db_prefix() . 'tickets where assigned = staffid and status = 5 ' . $this->modeWhere . ') as total_closed_tickets',
                     '(SELECT count(ticketid) from ' . db_prefix() . 'ticket_replies where ' . db_prefix() . 'ticket_replies.admin = staffid ' . str_replace('tickets',
                         'ticket_replies', $this->modeWhere) . ') as total_replies',
-                    // '(SELECT avg(response_seconds) FROM ( SELECT time_to_sec(timediff(min(r.date), t.date)) AS response_seconds FROM ' . db_prefix() . 'tickets t JOIN ' . db_prefix() . 'ticket_replies r  ON t.ticketid = r.ticketid WHERE r.admin != 0 AND t.assigned = staffid ' . str_replace(db_prefix() . 'tickets',
-                    //     't', $this->modeWhere) . ' GROUP BY t.ticketid) AS r)  as average_reply_time'
                 ])
             )
             ->get('staff')
@@ -92,9 +90,10 @@ class TicketsReportByStaff
 
     public function formatAverageReplyTime()
     {
-        return;
-
         $this->result = collect($this->result)->map(function ($staffReport) {
+            $staffReport->average_reply_time = $this->CI->db->select('(SELECT avg(response_seconds) FROM (SELECT time_to_sec(timediff(min(r.date), t.date)) AS response_seconds FROM ' . db_prefix() . 'tickets t JOIN ' . db_prefix() . 'ticket_replies r  ON t.ticketid = r.ticketid WHERE r.admin != 0 AND t.assigned = ' . $staffReport->staffid . ' ' . str_replace(db_prefix() . 'tickets', 't', $this->modeWhere) . ' GROUP BY t.ticketid) AS r) as average_reply_time')
+                ->get('staff')->row()->average_reply_time;
+
             if ($staffReport->average_reply_time === null || $staffReport->average_reply_time < 60) {
                 $staffReport->average_reply_time = '-';
             } else {

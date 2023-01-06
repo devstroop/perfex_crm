@@ -90,7 +90,6 @@ class Reports extends AdminController
         $data['proposal_taxes']    = $this->distinct_taxes('proposal');
         $data['credit_note_taxes'] = $this->distinct_taxes('credit_note');
 
-
         $data['title'] = _l('sales_reports');
         $this->load->view('admin/reports/sales', $data);
     }

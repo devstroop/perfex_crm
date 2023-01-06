@@ -51,10 +51,10 @@ function surveys_global_search_result_query($result, $q, $limit)
         $CI->db->order_by('subject', 'ASC');
 
         $result[] = [
-                'result'         => $CI->db->get()->result_array(),
-                'type'           => 'surveys',
-                'search_heading' => _l('surveys'),
-            ];
+            'result'         => $CI->db->get()->result_array(),
+            'type'           => 'surveys',
+            'search_heading' => _l('surveys'),
+        ];
     }
 
     return $result;
@@ -84,13 +84,13 @@ function survey_cron_settings_tab_content()
 function surveys_migration_tables_to_replace_old_links($tables)
 {
     $tables[] = [
-                    'table' => db_prefix() . 'surveys',
-                    'field' => 'description',
-                ];
+        'table' => db_prefix() . 'surveys',
+        'field' => 'description',
+    ];
     $tables[] = [
-                    'table' => db_prefix() . 'surveys',
-                    'field' => 'viewdescription',
-                ];
+        'table' => db_prefix() . 'surveys',
+        'field' => 'viewdescription',
+    ];
 
     return $tables;
 }
@@ -100,10 +100,10 @@ function surveys_permissions()
     $capabilities = [];
 
     $capabilities['capabilities'] = [
-            'view'   => _l('permission_view') . '(' . _l('permission_global') . ')',
-            'create' => _l('permission_create'),
-            'edit'   => _l('permission_edit'),
-            'delete' => _l('permission_delete'),
+        'view'   => _l('permission_view') . '(' . _l('permission_global') . ')',
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
     ];
 
     register_staff_capabilities('surveys', $capabilities, _l('surveys'));
@@ -151,35 +151,36 @@ function surveys_module_activation_hook()
 register_language_files(SURVEYS_MODULE_NAME, [SURVEYS_MODULE_NAME]);
 
 /**
- * Init surveys module menu items in setup in admin_init hook
- * @return null
- */
+* Init surveys module menu items in setup in admin_init hook
+* @return null
+*/
 function surveys_module_init_menu_items()
 {
     $CI = &get_instance();
 
     $CI->app->add_quick_actions_link([
-            'name'       => _l('survey'),
-            'permission' => 'surveys',
-            'url'        => 'surveys/survey',
-            'position'   => 69,
-            ]);
+        'name'       => _l('survey'),
+        'permission' => 'surveys',
+        'url'        => 'surveys/survey',
+        'position'   => 69,
+        'icon'       => 'fa-regular fa-circle-question',
+    ]);
 
     if (has_permission('surveys', '', 'view')) {
         $CI->app_menu->add_sidebar_children_item('utilities', [
-                'slug'     => 'surveys',
-                'name'     => _l('surveys'),
-                'href'     => admin_url('surveys'),
-                'position' => 26,
+            'slug'     => 'surveys',
+            'name'     => _l('surveys'),
+            'href'     => admin_url('surveys'),
+            'position' => 26,
         ]);
     }
 }
 /**
- * Helper function to get text question answers
- * @param  integer $questionid
- * @param  itneger $surveyid
- * @return array
- */
+* Helper function to get text question answers
+* @param  integer $questionid
+* @param  itneger $surveyid
+* @return array
+*/
 function surveys_get_text_question_answers($questionid, $surveyid)
 {
     $CI = & get_instance();

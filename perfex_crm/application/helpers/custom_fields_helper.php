@@ -66,7 +66,7 @@ function render_custom_fields($belongs_to, $rel_id = false, $where = [], $items_
             if ($is_admin
                 && ($items_add_edit_preview == false && $items_applied == false)
                 && (!defined('CLIENTS_AREA') || hooks()->apply_filters('show_custom_fields_edit_link_on_clients_area', false))) {
-                $fields_html .= '<a href="' . admin_url('custom_fields/field/' . $field['id']) . '" tabindex="-1" target="_blank" class="custom-field-inline-edit-link"><i class="fa fa-pencil-square-o"></i></a>';
+                $fields_html .= '<a href="' . admin_url('custom_fields/field/' . $field['id']) . '" tabindex="-1" target="_blank" class="custom-field-inline-edit-link"><i class="fa-regular fa-pen-to-square"></i></a>';
             }
 
             if ($rel_id !== false) {
@@ -260,7 +260,6 @@ function render_custom_fields($belongs_to, $rel_id = false, $where = [], $items_
                 }
                 $fields_html .= '</div>';
             } elseif ($field['type'] == 'link') {
-
                 if (startsWith($value, 'http')) {
                     $value = '<a href="' . $value . '" target="_blank">' . $value . '</a>';
                 }
@@ -292,7 +291,7 @@ function render_custom_fields($belongs_to, $rel_id = false, $where = [], $items_
                 $field_template .= '<button type="button" id="custom_fields_' . $field['fieldto'] . '_' . $field['id'] . '_btn-cancel" class="btn btn-default btn-md pull-left" value="">' . _l('cancel') . '</button>';
                 $field_template .= '</div>';
                 $field_template .= '<div class="col-md-6">';
-                $field_template .= '<button type="button" id="custom_fields_' . $field['fieldto'] . '_' . $field['id'] . '_btn-save" class="btn btn-info btn-md pull-right" value="">' . _l('apply') . '</button>';
+                $field_template .= '<button type="button" id="custom_fields_' . $field['fieldto'] . '_' . $field['id'] . '_btn-save" class="btn btn-primary btn-md pull-right" value="">' . _l('apply') . '</button>';
                 $field_template .= '</div>';
                 $field_template .= '</div>';
                 $fields_html .= '<script>';

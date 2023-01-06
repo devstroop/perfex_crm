@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 09, 2022 at 10:47 AM
+-- Generation Time: Oct 30, 2022 at 06:41 PM
 -- Server version: 8.0.27-0ubuntu0.20.04.1
 -- PHP Version: 7.4.27
 
@@ -1159,7 +1159,7 @@ CREATE TABLE `tblinvoicepaymentrecords` (
   `paymentmethod` varchar(191) DEFAULT NULL,
   `date` date NOT NULL,
   `daterecorded` datetime NOT NULL,
-  `note` text NOT NULL,
+  `note` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `transactionid` mediumtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -1521,7 +1521,7 @@ CREATE TABLE `tblmigrations` (
 --
 
 INSERT INTO `tblmigrations` (`version`) VALUES
-(294);
+(300);
 
 -- --------------------------------------------------------
 
@@ -2346,13 +2346,6 @@ CREATE TABLE `tblsessions` (
   `data` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `tblsessions`
---
-
-INSERT INTO `tblsessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('59ka5v5ekultnfs85b6pffuq9kpv8o4f', '192.168.10.1', 1652093241, 0x5f5f63695f6c6173745f726567656e65726174657c693a313635323039333233313b73746166665f757365725f69647c733a313a2231223b73746166665f6c6f676765645f696e7c623a313b73657475702d6d656e752d6f70656e7c733a303a22223b7265645f75726c7c733a36333a22687474703a2f2f70657266657863726d2e746573742f636c69656e74732f70726f6a6563742f323f67726f75703d70726f6a6563745f70726f706f73616c73223b);
-
 -- --------------------------------------------------------
 
 --
@@ -2751,9 +2744,9 @@ CREATE TABLE `tbltickets_status` (
 
 INSERT INTO `tbltickets_status` (`ticketstatusid`, `name`, `isdefault`, `statuscolor`, `statusorder`) VALUES
 (1, 'Open', 1, '#ff2d42', 1),
-(2, 'In progress', 1, '#84c529', 2),
-(3, 'Answered', 1, '#0000ff', 3),
-(4, 'On Hold', 1, '#c0c0c0', 4),
+(2, 'In progress', 1, '#22c55e', 2),
+(3, 'Answered', 1, '#2563eb', 3),
+(4, 'On Hold', 1, '#64748b', 4),
 (5, 'Closed', 1, '#03a9f4', 5);
 
 -- --------------------------------------------------------

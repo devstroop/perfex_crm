@@ -36,8 +36,8 @@ function goals_staff_member_deleted($data)
     $CI = &get_instance();
     $CI->db->where('staff_id', $data['id']);
     $CI->db->update(db_prefix() . 'goals', [
-            'staff_id' => $data['transfer_data_to'],
-        ]);
+        'staff_id' => $data['transfer_data_to'],
+    ]);
 }
 
 function goals_global_search_result_output($output, $data)
@@ -59,10 +59,10 @@ function goals_global_search_result_query($result, $q, $limit)
         $CI->db->order_by('subject', 'ASC');
 
         $result[] = [
-                'result'         => $CI->db->get()->result_array(),
-                'type'           => 'goals',
-                'search_heading' => _l('goals'),
-            ];
+            'result'         => $CI->db->get()->result_array(),
+            'type'           => 'goals',
+            'search_heading' => _l('goals'),
+        ];
     }
 
     return $result;
@@ -71,9 +71,9 @@ function goals_global_search_result_query($result, $q, $limit)
 function goals_migration_tables_to_replace_old_links($tables)
 {
     $tables[] = [
-                'table' => db_prefix() . 'goals',
-                'field' => 'description',
-            ];
+        'table' => db_prefix() . 'goals',
+        'field' => 'description',
+    ];
 
     return $tables;
 }
@@ -83,10 +83,10 @@ function goals_permissions()
     $capabilities = [];
 
     $capabilities['capabilities'] = [
-            'view'   => _l('permission_view') . '(' . _l('permission_global') . ')',
-            'create' => _l('permission_create'),
-            'edit'   => _l('permission_edit'),
-            'delete' => _l('permission_delete'),
+        'view'   => _l('permission_view') . '(' . _l('permission_global') . ')',
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
     ];
 
     register_staff_capabilities('goals', $capabilities, _l('goals'));
@@ -138,36 +138,37 @@ function goals_module_activation_hook()
 register_language_files(GOALS_MODULE_NAME, [GOALS_MODULE_NAME]);
 
 /**
- * Init goals module menu items in setup in admin_init hook
- * @return null
- */
+* Init goals module menu items in setup in admin_init hook
+* @return null
+*/
 function goals_module_init_menu_items()
 {
     $CI = &get_instance();
 
     $CI->app->add_quick_actions_link([
-            'name'       => _l('goal'),
-            'url'        => 'goals/goal',
-            'permission' => 'goals',
-            'position'   => 56,
-            ]);
+        'name'       => _l('goal'),
+        'url'        => 'goals/goal',
+        'permission' => 'goals',
+        'position'   => 56,
+        'icon'       => 'fa-solid fa-bars-progress',
+    ]);
 
     if (has_permission('goals', '', 'view')) {
         $CI->app_menu->add_sidebar_children_item('utilities', [
-                'slug'     => 'goals-tracking',
-                'name'     => _l('goals'),
-                'href'     => admin_url('goals'),
-                'position' => 24,
+            'slug'     => 'goals-tracking',
+            'name'     => _l('goals'),
+            'href'     => admin_url('goals'),
+            'position' => 24,
         ]);
     }
 }
 
 
 /**
- * Get goal types for the goals feature
- *
- * @return array
- */
+* Get goal types for the goals feature
+*
+* @return array
+*/
 function get_goal_types()
 {
     $types = [
@@ -195,10 +196,10 @@ function get_goal_types()
             'dashboard' => has_permission('customers', 'view'),
         ],
         [
-            'key'        => 4,
-            'lang_key'   => 'goal_type_increase_customers_with_leads_conversions',
-            'subtext'    => 'goal_type_increase_customers_with_leads_conversions_subtext',
-             'dashboard' => has_permission('customers', 'view'),
+            'key'       => 4,
+            'lang_key'  => 'goal_type_increase_customers_with_leads_conversions',
+            'subtext'   => 'goal_type_increase_customers_with_leads_conversions_subtext',
+            'dashboard' => has_permission('customers', 'view'),
 
         ],
         [
@@ -225,12 +226,12 @@ function get_goal_types()
 }
 
 /**
- * Get goal type by given key
- *
- * @param  int $key
- *
- * @return array
- */
+* Get goal type by given key
+*
+* @param  int $key
+*
+* @return array
+*/
 function get_goal_type($key)
 {
     foreach (get_goal_types() as $type) {
@@ -241,12 +242,12 @@ function get_goal_type($key)
 }
 
 /**
- * Translate goal type based on passed key
- *
- * @param  mixed $key
- *
- * @return string
- */
+* Translate goal type based on passed key
+*
+* @param  mixed $key
+*
+* @return string
+*/
 function format_goal_type($key)
 {
     foreach (get_goal_types() as $type) {

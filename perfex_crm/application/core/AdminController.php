@@ -84,9 +84,9 @@ class AdminController extends App_Controller
         }
 
         /**
-         * Autoloaded view variables
-         * @var array
-         */
+        * Autoloaded view variables
+        * @var array
+        */
         $vars = hooks()->apply_filters('admin_area_auto_loaded_vars', $vars);
         $this->load->vars($vars);
     }
@@ -98,43 +98,48 @@ class AdminController extends App_Controller
             'permission' => 'invoices',
             'url'        => 'invoices/invoice',
             'position'   => 5,
-            ]);
+            'icon'       => 'fa-solid fa-file-invoice',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('estimate'),
             'permission' => 'estimates',
             'url'        => 'estimates/estimate',
             'position'   => 10,
-            ]);
+            'icon'       => 'fa-regular fa-file',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('proposal'),
             'permission' => 'proposals',
             'url'        => 'proposals/proposal',
             'position'   => 15,
-            ]);
+            'icon'       => 'fa-regular fa-file-powerpoint',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('credit_note'),
             'permission' => 'credit_notes',
             'url'        => 'credit_notes/credit_note',
             'position'   => 20,
-            ]);
-
+            'icon'       => 'fa-regular fa-file-lines',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('client'),
             'permission' => 'customers',
             'url'        => 'clients/client',
             'position'   => 25,
-            ]);
+            'icon'       => 'fa-regular fa-building',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('subscription'),
             'permission' => 'subscriptions',
             'url'        => 'subscriptions/create',
             'position'   => 30,
-            ]);
+            'icon'       => 'fa-solid fa-repeat',
+        ]);
 
 
         $this->app->add_quick_actions_link([
@@ -142,7 +147,8 @@ class AdminController extends App_Controller
             'url'        => 'projects/project',
             'permission' => 'projects',
             'position'   => 35,
-            ]);
+            'icon'       => 'fa-solid fa-chart-gantt',
+        ]);
 
 
         $this->app->add_quick_actions_link([
@@ -151,10 +157,11 @@ class AdminController extends App_Controller
             'custom_url'      => true,
             'href_attributes' => [
                 'onclick' => 'new_task();return false;',
-                ],
+            ],
             'permission' => 'tasks',
             'position'   => 40,
-            ]);
+            'icon'       => 'fa-regular fa-circle-check',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'            => _l('lead'),
@@ -163,16 +170,18 @@ class AdminController extends App_Controller
             'permission'      => 'is_staff_member',
             'href_attributes' => [
                 'onclick' => 'init_lead(); return false;',
-                ],
+            ],
             'position' => 45,
-            ]);
+            'icon'     => 'fa-solid fa-tty',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('expense'),
             'permission' => 'expenses',
             'url'        => 'expenses/expense',
             'position'   => 50,
-            ]);
+            'icon'       => 'fa-solid fa-file-lines',
+        ]);
 
 
         $this->app->add_quick_actions_link([
@@ -180,7 +189,8 @@ class AdminController extends App_Controller
             'permission' => 'contracts',
             'url'        => 'contracts/contract',
             'position'   => 55,
-            ]);
+            'icon'       => 'fa-solid fa-file-contract',
+        ]);
 
 
         $this->app->add_quick_actions_link([
@@ -188,13 +198,15 @@ class AdminController extends App_Controller
             'permission' => 'knowledge_base',
             'url'        => 'knowledge_base/article',
             'position'   => 60,
-            ]);
+            'icon'       => 'fa-solid fa-circle-info',
+        ]);
 
         $tickets = [
             'name'     => _l('ticket'),
             'url'      => 'tickets/add',
             'position' => 65,
-            ];
+            'icon'     => 'fa-solid fa-life-ring',
+        ];
 
         if (get_option('access_tickets_to_none_staff_members') == 0 && !is_staff_member()) {
             $tickets['permission'] = 'is_staff_member';
@@ -207,13 +219,15 @@ class AdminController extends App_Controller
             'url'        => 'staff/member',
             'permission' => 'staff',
             'position'   => 70,
-            ]);
+            'icon'       => 'fa-regular fa-user',
+        ]);
 
         $this->app->add_quick_actions_link([
             'name'       => _l('calendar_event'),
             'url'        => 'utilities/calendar?new_event=true&date=' . _d(date('Y-m-d')),
             'permission' => '',
             'position'   => 75,
-            ]);
+            'icon'       => 'fa-regular fa-calendar',
+        ]);
     }
 }

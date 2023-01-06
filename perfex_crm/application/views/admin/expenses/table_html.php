@@ -2,30 +2,31 @@
 <?php
 $hasPermission = staff_can('edit', 'expenses') || staff_can('edit', 'expenses');
 if ($withBulkActions === true && $hasPermission) { ?>
-  <a href="#" data-toggle="modal" data-target="#expenses_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-expenses"><?php echo _l('bulk_actions'); ?></a>
+<a href="#" data-toggle="modal" data-target="#expenses_bulk_actions" class="hide bulk-actions-btn table-btn"
+    data-table=".table-expenses"><?php echo _l('bulk_actions'); ?></a>
 <?php } ?>
 <?php
 $table_data = [
   [
-    'name' => '<span class="hide"> - </span><div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="expenses"><label></label></div>',
+    'name'     => '<span class="hide"> - </span><div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="expenses"><label></label></div>',
     'th_attrs' => ['class' => $withBulkActions === true && $hasPermission ? '' : 'not_visible'],
   ],
   _l('the_number_sign'),
   _l('expense_dt_table_heading_category'),
   _l('expense_dt_table_heading_amount'),
   _l('expense_name'),
-  _l('expense_receipt'),
+  _l('receipt'),
   _l('expense_dt_table_heading_date'),
 ];
 
 if (!isset($project)) {
-  array_push($table_data, _l('project'));
-  array_push($table_data, [
+    array_push($table_data, _l('project'));
+    array_push($table_data, [
     'name'     => _l('expense_dt_table_heading_customer'),
     'th_attrs' => ['class' => (isset($client) ? 'not_visible' : '')],
   ]);
 } else {
-  array_shift($table_data);
+    array_shift($table_data);
 }
 
 $table_data = array_merge($table_data, [
@@ -37,7 +38,10 @@ $table_data = array_merge($table_data, [
 $custom_fields = get_custom_fields('expenses', ['show_on_table' => 1]);
 
 foreach ($custom_fields as $field) {
-  array_push($table_data, $field['name']);
+    array_push($table_data, [
+   'name'     => $field['name'],
+   'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
+ ]);
 }
 
 $table_data = hooks()->apply_filters('expenses_table_columns', $table_data);

@@ -361,7 +361,6 @@ abstract class App_import
         $form .= form_open($this->ci->uri->uri_string());
         $form .= form_hidden('download_sample', 'true');
         $form .= '<button type="submit" class="btn btn-success">Download Sample</button>';
-        $form .= '<hr />';
         $form .= form_close();
 
         return $form;
@@ -456,7 +455,7 @@ abstract class App_import
         $dbFieldKeys = [];
 
         $table = '<div class="table-responsive no-dt">';
-        $table .= '<table class="table table-hover table-bordered">';
+        $table .= '<table class="table table-hover table-bordered no-mtop">';
         $table .= '<thead>';
         $table .= '<tr>';
 
@@ -464,7 +463,7 @@ abstract class App_import
             array_push($allFields, $field);
             $dbFieldKeys[$key] = $field;
 
-            $table .= '<th class="bold database_field_' . $field . '">';
+            $table .= '<th class="bold database_field_' . $field . '" style="white-space: nowrap;">';
             if (in_array($field, $this->getRequiredFields())) {
                 $table .= '<span class="text-danger">*</span> ';
             }
@@ -701,7 +700,7 @@ abstract class App_import
                                         'value'   => trim($row[$fieldNumber]),
                                         'fieldto' => $customFieldTo,
                                     ];
-                $this->ci->db->insert(db_prefix().'customfieldsvalues', $customFieldData);
+                $this->ci->db->insert(db_prefix() . 'customfieldsvalues', $customFieldData);
             }
             $fieldNumber++;
         }

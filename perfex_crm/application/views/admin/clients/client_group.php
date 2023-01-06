@@ -9,18 +9,18 @@
                     <span class="add-title"><?php echo _l('customer_group_add_heading'); ?></span>
                 </h4>
             </div>
-            <?php echo form_open('admin/clients/group',array('id'=>'customer-group-modal')); ?>
+            <?php echo form_open('admin/clients/group', ['id' => 'customer-group-modal']); ?>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo render_input('name','customer_group_name'); ?>
+                        <?php echo render_input('name', 'customer_group_name'); ?>
                         <?php echo form_hidden('id'); ?>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button group="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <button group="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                <button group="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
                 <?php echo form_close(); ?>
             </div>
         </div>

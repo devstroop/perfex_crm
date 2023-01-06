@@ -22,7 +22,7 @@ class Spam_filters extends AdminController
                 'value',
             ];
             $sIndexColumn = 'id';
-            $sTable       = db_prefix().'spam_filters';
+            $sTable       = db_prefix() . 'spam_filters';
             $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [
                 'AND type ="' . $filter_type . '" AND rel_type="' . $rel_type . '"',
             ], [
@@ -36,12 +36,12 @@ class Spam_filters extends AdminController
                     $_data = $aRow[$aColumns[$i]];
                     $row[] = $_data;
                 }
-                $options = icon_btn('#', 'pencil-square-o', 'btn-default', [
+                $options = icon_btn('#', 'fa-regular fa-pen-to-square', 'btn-default', [
                     'onclick'    => 'edit_spam_filter(this,' . $aRow['id'] . '); return false;',
                     'data-value' => $aRow['value'],
                     'data-type'  => $filter_type,
                 ]);
-                $row[]              = $options .= icon_btn('spam_filters/delete/' . $aRow['id'] . '/' . $rel_type, 'remove', 'btn-danger _delete');
+                $row[]              = $options .= icon_btn('spam_filters/delete/' . $aRow['id'] . '/' . $rel_type, 'fa fa-remove', 'btn-danger _delete');
                 $output['aaData'][] = $row;
             }
             echo json_encode($output);

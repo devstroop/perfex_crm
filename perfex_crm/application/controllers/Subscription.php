@@ -140,7 +140,7 @@ class Subscription extends ClientsController
             }
         }
 
-        $sessionData = hooks()->apply_filters('stripe_subscription_session_data',$sessionData, $subscription_hash);
+        $sessionData = hooks()->apply_filters('stripe_subscription_session_data', $sessionData, $subscription_hash);
 
         try {
             $session = $this->stripe_core->create_session($sessionData);

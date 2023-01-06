@@ -17,7 +17,6 @@ class Proposal_pdf extends App_pdf
         } else if ($proposal->rel_id != null && $proposal->rel_type == 'lead') {
             $CI = &get_instance();
 
-            $this->load_language($proposal->rel_id);
             $CI->db->select('default_language')->where('id', $proposal->rel_id);
             $language = $CI->db->get('leads')->row()->default_language;
 

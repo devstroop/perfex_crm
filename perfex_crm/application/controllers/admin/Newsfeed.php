@@ -89,7 +89,7 @@ class Newsfeed extends AdminController
             $response .= '<div class="post-content mtop20 display-block">';
             if (!empty($visible_departments)) {
                 $visible_departments = substr($visible_departments, 0, -2);
-                $response .= '<i class="fa fa-question-circle" data-toggle="tooltip" data-title="' . _l('newsfeed_newsfeed_post_only_visible_to_departments', $visible_departments) . '"></i> ';
+                $response .= '<i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="' . _l('newsfeed_newsfeed_post_only_visible_to_departments', $visible_departments) . '"></i> ';
             }
             $response .= check_for_links($post['content']);
             $response .= '<div class="clearfix mbot10"></div>';

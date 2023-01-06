@@ -46,7 +46,7 @@ class Taxes_model extends App_Model
             log_activity('New Tax Added [ID: ' . $insert_id . ', ' . $data['name'] . ']');
 
             hooks()->do_action('after_tax_created', [
-                'id'   => $id,
+                'id'   => $insert_id,
                 'data' => $data,
             ]);
 

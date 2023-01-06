@@ -169,11 +169,11 @@ class Tickets extends AdminController
     public function check_staff_replying($ticketId)
     {
         if ($this->input->is_ajax_request()) {
-            $ticket = $this->tickets_model->get_staff_replying($ticketId);
+            $ticket            = $this->tickets_model->get_staff_replying($ticketId);
             $isAnotherReplying = $ticket->staff_id_replying !== null && $ticket->staff_id_replying !== get_staff_user_id();
             echo json_encode([
                 'is_other_staff_replying' => $isAnotherReplying,
-                'message' => $isAnotherReplying ? _l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying)) : ''
+                'message'                 => $isAnotherReplying ? _l('staff_is_currently_replying', get_staff_full_name($ticket->staff_id_replying)) : '',
             ]);
             die;
         }
@@ -185,7 +185,7 @@ class Tickets extends AdminController
             redirect(admin_url('tickets/add'));
         }
 
-        $data['ticket'] = $this->tickets_model->get_ticket_by_id($id);
+        $data['ticket']         = $this->tickets_model->get_ticket_by_id($id);
         $data['merged_tickets'] = $this->tickets_model->get_merged_tickets_by_primary_id($id);
 
         if (!$data['ticket']) {
@@ -424,8 +424,8 @@ class Tickets extends AdminController
                     }
                     $row[] = $_data;
                 }
-                $options            = icon_btn('tickets/predefined_reply/' . $aRow['id'], 'pencil-square-o');
-                $row[]              = $options .= icon_btn('tickets/delete_predefined_reply/' . $aRow['id'], 'remove', 'btn-danger _delete');
+                $options            = icon_btn('tickets/predefined_reply/' . $aRow['id'], 'fa-regular fa-pen-to-square');
+                $row[]              = $options .= icon_btn('tickets/delete_predefined_reply/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
                 $output['aaData'][] = $row;
             }
             echo json_encode($output);
@@ -600,11 +600,11 @@ class Tickets extends AdminController
                     }
                     $row[] = $_data;
                 }
-                $options = icon_btn('#', 'pencil-square-o', 'btn-default', [
+                $options = icon_btn('#', 'fa-regular fa-pen-to-square', 'btn-default', [
                     'data-name' => $aRow['name'],
                     'onclick'   => 'edit_service(this,' . $aRow['serviceid'] . '); return false;',
                 ]);
-                $row[]              = $options .= icon_btn('tickets/delete_service/' . $aRow['serviceid'], 'remove', 'btn-danger _delete');
+                $row[]              = $options .= icon_btn('tickets/delete_service/' . $aRow['serviceid'], 'fa fa-remove', 'btn-danger _delete');
                 $output['aaData'][] = $row;
             }
             echo json_encode($output);

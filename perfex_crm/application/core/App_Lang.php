@@ -7,6 +7,11 @@ require APPPATH . 'third_party/MX/Lang.php';
 class App_Lang extends MX_Lang
 {
     /**
+     * @var string
+     */
+    public $last_loaded = '';
+
+    /**
      * List of module translations
      *
      * @var array
@@ -85,5 +90,15 @@ class App_Lang extends MX_Lang
         }
 
         return $value;
+    }
+
+    /**
+     * Set the last loaded language
+     *
+     * @param string $language
+     */
+    public function set_last_loaded_language($language)
+    {
+        $this->last_loaded = $language;
     }
 }

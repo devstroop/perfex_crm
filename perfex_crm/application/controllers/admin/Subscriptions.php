@@ -153,9 +153,9 @@ class Subscriptions extends AdminController
             if (!empty($subscription->stripe_subscription_id)) {
                 $data['stripeSubscription'] = $this->stripe_subscriptions->get_subscription($subscription->stripe_subscription_id);
 
-/*                              $data['stripeSubscription']->billing_cycle_anchor = 'now';
-                              $data['stripeSubscription']->save();
-                              die;*/
+                /*                              $data['stripeSubscription']->billing_cycle_anchor = 'now';
+                                              $data['stripeSubscription']->save();
+                                              die;*/
 
                 if ($subscription->status != 'canceled' && $subscription->status !== 'incomplete_expired') {
                     $data['upcoming_invoice'] = $this->stripe_subscriptions->get_upcoming_invoice($subscription->stripe_subscription_id);
@@ -243,6 +243,19 @@ class Subscriptions extends AdminController
         }
 
         redirect(admin_url('subscriptions/edit/' . $id));
+    }
+
+    public function sync()
+    {
+        if (!is_admin()) {
+            access_denied('Sync subscriptions');
+        }
+
+        $this->load->library('stripe_subscriptions_synchronizer');
+
+        echo '<a href="' . admin_url('subscriptions') . '">Go Back</a><br /><br />';
+
+        $this->stripe_subscriptions_synchronizer->sync();
     }
 
     public function resume($id)

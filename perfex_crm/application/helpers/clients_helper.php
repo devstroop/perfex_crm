@@ -195,7 +195,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('contacts', [
         'name'     => !is_empty_customer_company($client_id) || empty($client_id) ? _l('customer_contacts') : _l('contact'),
-        'icon'     => 'fa fa-users',
+        'icon'     => 'fa fa-user',
         'view'     => 'admin/clients/groups/contacts',
         'position' => 10,
         'badge'    => [],
@@ -203,7 +203,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('notes', [
         'name'     => _l('contracts_notes_tab'),
-        'icon'     => 'fa fa-sticky-note-o',
+        'icon'     => 'fa-regular fa-note-sticky',
         'view'     => 'admin/clients/groups/notes',
         'position' => 15,
         'badge'    => [],
@@ -238,7 +238,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('proposals', [
         'name'     => _l('proposals'),
-        'icon'     => 'fa fa-file-powerpoint-o',
+        'icon'     => 'fa-regular fa-file-powerpoint',
         'view'     => 'admin/clients/groups/proposals',
         'visible'  => (has_permission('proposals', '', 'view') || has_permission('proposals', '', 'view_own') || (get_option('allow_staff_view_proposals_assigned') == 1 && staff_has_assigned_proposals())),
         'position' => 35,
@@ -247,7 +247,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('credit_notes', [
         'name'     => _l('credit_notes'),
-        'icon'     => 'fa fa-sticky-note-o',
+        'icon'     => 'fa-regular fa-file-lines',
         'view'     => 'admin/clients/groups/credit_notes',
         'visible'  => (has_permission('credit_notes', '', 'view') || has_permission('credit_notes', '', 'view_own')),
         'position' => 40,
@@ -256,7 +256,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('estimates', [
         'name'     => _l('estimates'),
-        'icon'     => 'fa fa-clipboard',
+        'icon'     => 'fa-regular fa-file',
         'view'     => 'admin/clients/groups/estimates',
         'visible'  => (has_permission('estimates', '', 'view') || has_permission('estimates', '', 'view_own') || (get_option('allow_staff_view_estimates_assigned') == 1 && staff_has_assigned_estimates())),
         'position' => 45,
@@ -274,7 +274,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('expenses', [
         'name'     => _l('expenses'),
-        'icon'     => 'fa fa-file-text-o',
+        'icon'     => 'fa-regular fa-file-lines',
         'view'     => 'admin/clients/groups/expenses',
         'visible'  => (has_permission('expenses', '', 'view') || has_permission('expenses', '', 'view_own')),
         'position' => 55,
@@ -283,7 +283,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('contracts', [
         'name'     => _l('contracts'),
-        'icon'     => 'fa fa-file',
+        'icon'     => 'fa fa-file-contract',
         'view'     => 'admin/clients/groups/contracts',
         'visible'  => (has_permission('contracts', '', 'view') || has_permission('contracts', '', 'view_own')),
         'position' => 60,
@@ -292,7 +292,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('projects', [
         'name'     => _l('projects'),
-        'icon'     => 'fa fa-bars',
+        'icon'     => 'fa-solid fa-chart-gantt',
         'view'     => 'admin/clients/groups/projects',
         'position' => 65,
         'badge'    => [],
@@ -308,7 +308,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('tickets', [
         'name'     => _l('tickets'),
-        'icon'     => 'fa fa-ticket',
+        'icon'     => 'fa-regular fa-life-ring',
         'view'     => 'admin/clients/groups/tickets',
         'visible'  => ((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()),
         'position' => 75,
@@ -333,7 +333,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('reminders', [
         'name'     => $remindersText,
-        'icon'     => 'fa fa-clock-o',
+        'icon'     => 'fa-regular fa-clock',
         'view'     => 'admin/clients/groups/reminders',
         'position' => 90,
         'badge'    => [],
@@ -341,7 +341,7 @@ function app_init_customer_profile_tabs()
 
     $CI->app_tabs->add_customer_profile_tab('map', [
         'name'     => _l('customer_map'),
-        'icon'     => 'fa fa-map-marker',
+        'icon'     => 'fa-solid fa-location-dot',
         'view'     => 'admin/clients/groups/map',
         'position' => 95,
         'badge'    => [],
@@ -723,13 +723,13 @@ function load_client_language($customer_id = '')
     $CI->lang->language  = [];
 
     $CI->lang->load($language . '_lang', $language);
-
-    if (file_exists(APPPATH . 'language/' . $language . '/custom_lang.php')) {
-        $CI->lang->load('custom_lang', $language);
-    }
+    load_custom_lang_file($language);
 
     $GLOBALS['language'] = $language;
-    $GLOBALS['locale']   = get_locale_key($language);
+
+    $GLOBALS['locale'] = get_locale_key($language);
+
+    $CI->lang->set_last_loaded_language($language);
 
     hooks()->do_action('after_load_client_language', $language);
 

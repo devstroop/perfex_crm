@@ -2,7 +2,7 @@
 <!-- Copy Project -->
 <div class="modal fade" id="copy_project" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <?php echo form_open(admin_url('projects/copy/'.(isset($project) ? $project->id : '')),array('id'=>'copy_form','data-copy-url'=>admin_url('projects/copy/'))); ?>
+        <?php echo form_open(admin_url('projects/copy/' . (isset($project) ? $project->id : '')), ['id' => 'copy_form', 'data-copy-url' => admin_url('projects/copy/')]); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -40,15 +40,17 @@
                         <hr />
                         <div class="copy-project-tasks-status-wrapper">
                             <p class="bold"><?php echo _l('copy_project_tasks_status'); ?></p>
-                            <?php foreach($task_statuses as $cp_task_status){ ?>
+                            <?php foreach ($task_statuses as $cp_task_status) { ?>
                                 <div class="radio radio-primary">
-                                    <input type="radio" name="copy_project_task_status" value="<?php echo $cp_task_status['id']; ?>" id="cp_task_status_<?php echo $cp_task_status['id']; ?>"<?php if($cp_task_status['id'] == '1'){echo ' checked';} ?>>
+                                    <input type="radio" name="copy_project_task_status" value="<?php echo $cp_task_status['id']; ?>" id="cp_task_status_<?php echo $cp_task_status['id']; ?>"<?php if ($cp_task_status['id'] == '1') {
+    echo ' checked';
+} ?>>
                                     <label for="cp_task_status_<?php echo $cp_task_status['id']; ?>"><?php echo $cp_task_status['name']; ?></label>
                                 </div>
                             <?php } ?>
                             <hr />
                         </div>
-                        <?php echo render_input('name','project_name', (isset($project) ? $project->name : '')); ?>
+                        <?php echo render_input('name', 'project_name', (isset($project) ? $project->name : '')); ?>
                         <div class="form-group">
                           <label for="clientid_copy_project"><?php echo _l('project_customer'); ?></label>
                           <select id="clientid_copy_project" name="clientid_copy_project" data-live-search="true" data-width="100%" class="ajax-search" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
@@ -56,10 +58,10 @@
                       </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <?php echo render_date_input('start_date','project_start_date',_d(date('Y-m-d'))); ?>
+                                <?php echo render_date_input('start_date', 'project_start_date', _d(date('Y-m-d'))); ?>
                             </div>
                             <div class="col-md-6">
-                                <?php echo render_date_input('deadline','project_deadline'); ?>
+                                <?php echo render_date_input('deadline', 'project_deadline'); ?>
                             </div>
                         </div>
                     </div>
@@ -67,7 +69,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <button type="submit" data-form="#copy_form" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>"  class="btn btn-info"><?php echo _l('copy_project'); ?></button>
+                <button type="submit" data-form="#copy_form" autocomplete="off" data-loading-text="<?php echo _l('wait_text'); ?>"  class="btn btn-primary"><?php echo _l('copy_project'); ?></button>
             </div>
         </div>
         <!-- /.modal-content -->

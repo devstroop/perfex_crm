@@ -33,7 +33,6 @@ function theme_assets()
     $CI->app_scripts->theme('lightbox-js', 'assets/plugins/lightbox/js/lightbox.min.js');
 
     if (is_client_logged_in()) {
-
         $CI->app_scripts->theme('dropzone-js', 'assets/plugins/dropzone/min/dropzone.min.js');
         $CI->app_scripts->theme('circle-progress-js', 'assets/plugins/jquery-circle-progress/circle-progress.min.js');
 
@@ -63,7 +62,7 @@ function theme_assets()
         $CI->app_scripts->theme(
             'theme-js',
             base_url($CI->app_scripts->core_file(theme_assets_path() . '/js', 'clients.js')) . '?v=' . $CI->app_css->core_version(),
-             ['common-js']
+            ['common-js']
         );
     }
 
@@ -76,14 +75,20 @@ function theme_assets()
     );
 
     $CI->app_css->theme('bootstrap-css', 'assets/plugins/bootstrap/css/bootstrap.min.css');
-    $CI->app_css->theme('roboto-css', 'assets/plugins/roboto/roboto.css');
+    // $CI->app_css->theme('roboto-css', 'assets/plugins/roboto/roboto.css');
+    $CI->app_css->theme('inter-font', 'https://rsms.me/inter/inter.css');
 
     if (is_rtl()) {
         $CI->app_css->theme('bootstrap-rtl-css', 'assets/plugins/bootstrap-arabic/css/bootstrap-arabic.min.css');
     }
 
     $CI->app_css->theme('datatables-css', 'assets/plugins/datatables/datatables.min.css');
-    $CI->app_css->theme('fontawesome-css', 'assets/plugins/font-awesome/css/font-awesome.min.css');
+
+    $CI->app_css->theme('fontawesome-css', 'assets/plugins/font-awesome/css/fontawesome.min.css');
+    $CI->app_css->theme('fontawesome-brands', 'assets/plugins/font-awesome/css/brands.min.css');
+    $CI->app_css->theme('fontawesome-solid', 'assets/plugins/font-awesome/css/solid.min.css');
+    $CI->app_css->theme('fontawesome-regular', 'assets/plugins/font-awesome/css/regular.min.css');
+
     $CI->app_css->theme('datetimepicker-css', 'assets/plugins/datetimepicker/jquery.datetimepicker.min.css');
     $CI->app_css->theme('bootstrap-select-css', 'assets/plugins/bootstrap-select/css/bootstrap-select.min.css');
 
@@ -95,10 +100,7 @@ function theme_assets()
     $CI->app_css->theme('lightbox-css', 'assets/plugins/lightbox/css/lightbox.min.css');
     $CI->app_css->theme('colorpicker-css', 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css');
 
-    $CI->app_css->theme(
-        'bootstrap-overrides-css',
-        base_url($CI->app_scripts->core_file('assets/css', 'bs-overides.css')) . '?v=' . $CI->app_css->core_version()
-    );
+    $CI->app_css->theme('tailwind-css', base_url($CI->app_css->core_file('assets/builds', 'tailwind.css')) . '?v=' . $CI->app_css->core_version(), ['bootstrap-css']);
 
     $CI->app_css->theme(
         'theme-css',

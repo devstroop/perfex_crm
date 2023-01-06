@@ -48,6 +48,10 @@ class App_pusher
 
     public function __call($name, $arguments)
     {
+        if (! $this->pusher) {
+            return;
+        }
+
         if (method_exists($this->pusher, $name)) {
             return $this->pusher->{$name}(...$arguments);
         }

@@ -40,10 +40,10 @@ $where  = [];
 $filter = [];
 
 if ($this->ci->input->post('not_sent')) {
-    array_push($filter, 'AND sent = 0 AND ' . db_prefix() . 'invoices.status NOT IN('.Invoices_model::STATUS_PAID.','.Invoices_model::STATUS_CANCELLED.')');
+    array_push($filter, 'AND sent = 0 AND ' . db_prefix() . 'invoices.status NOT IN(' . Invoices_model::STATUS_PAID . ',' . Invoices_model::STATUS_CANCELLED . ')');
 }
 if ($this->ci->input->post('not_have_payment')) {
-    array_push($filter, 'AND ' . db_prefix() . 'invoices.id NOT IN(SELECT invoiceid FROM ' . db_prefix() . 'invoicepaymentrecords) AND ' . db_prefix() . 'invoices.status != '.Invoices_model::STATUS_CANCELLED);
+    array_push($filter, 'AND ' . db_prefix() . 'invoices.id NOT IN(SELECT invoiceid FROM ' . db_prefix() . 'invoicepaymentrecords) AND ' . db_prefix() . 'invoices.status != ' . Invoices_model::STATUS_CANCELLED);
 }
 if ($this->ci->input->post('recurring')) {
     array_push($filter, 'AND recurring > 0');
@@ -119,7 +119,7 @@ if (count($custom_fields) > 4) {
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
     db_prefix() . 'invoices.id',
     db_prefix() . 'invoices.clientid',
-    db_prefix(). 'currencies.name as currency_name',
+    db_prefix() . 'currencies.name as currency_name',
     'project_id',
     'hash',
     'recurring',
@@ -141,7 +141,7 @@ foreach ($rResult as $aRow) {
     }
 
     if ($aRow['recurring'] > 0) {
-        $numberOutput .= '<br /><span class="label label-primary inline-block mtop4"> ' . _l('invoice_recurring_indicator') . '</span>';
+        $numberOutput .= '<br /><span class="label label-primary inline-block tw-mt-1"> ' . _l('invoice_recurring_indicator') . '</span>';
     }
 
     $numberOutput .= '<div class="row-options">';

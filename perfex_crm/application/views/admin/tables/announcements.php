@@ -8,7 +8,7 @@ $aColumns = [
     ];
 
 $sIndexColumn = 'announcementid';
-$sTable       = db_prefix().'announcements';
+$sTable       = db_prefix() . 'announcements';
 $where        = [];
 $is_admin     = is_admin();
 
@@ -19,7 +19,7 @@ if (!is_admin()) {
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, [], $where, [
     'announcementid',
     'showtostaff',
-    '(SELECT COUNT(*) FROM '.db_prefix().'dismissed_announcements WHERE announcementid='.db_prefix().'announcements.announcementid AND staff=1 AND userid='.get_staff_user_id().') as is_dismissed'
+    '(SELECT COUNT(*) FROM ' . db_prefix() . 'dismissed_announcements WHERE announcementid=' . db_prefix() . 'announcements.announcementid AND staff=1 AND userid=' . get_staff_user_id() . ') as is_dismissed',
     ]);
 
 $output   = $result['output'];
@@ -57,7 +57,7 @@ foreach ($rResult as $aRow) {
     $row['DT_RowClass'] = 'has-row-options';
 
     if (!$aRow['is_dismissed'] && $aRow['showtostaff'] == '1') {
-        $row['DT_RowClass'] .= ' alert-info';
+        $row['DT_RowClass'] .= ' info';
     }
 
     $output['aaData'][] = $row;

@@ -25,7 +25,7 @@ function format_task_status($status, $text = false, $clean = false)
     $style = '';
     $class = '';
     if ($text == false) {
-        $style = 'border: 1px solid ' . $status['color'] . ';color:' . $status['color'] . ';';
+        $style = 'color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';';
         $class = 'label';
     } else {
         $style = 'color:' . $status['color'] . ';';
@@ -306,7 +306,10 @@ function init_relation_tasks_table($table_attributes = [])
     ]);
 
     foreach ($custom_fields as $field) {
-        array_push($table_data, $field['name']);
+        array_push($table_data, [
+           'name'     => $field['name'],
+           'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
+       ]);
     }
 
     $table_data = hooks()->apply_filters('tasks_related_table_columns', $table_data);
@@ -335,58 +338,58 @@ function init_relation_tasks_table($table_attributes = [])
         }
         // projects have button on top
         if ($table_attributes['data-new-rel-type'] != 'project') {
-            echo "<a href='#' class='btn btn-info pull-left mbot25 mright5 new-task-relation" . $disabled . "' onclick=\"new_task_from_relation('$table_name'); return false;\" data-rel-id='" . $table_attributes['data-new-rel-id'] . "' data-rel-type='" . $table_attributes['data-new-rel-type'] . "'>" . _l('new_task') . '</a>';
+            echo "<a href='#' class='btn btn-primary pull-left mright5 new-task-relation" . $disabled . "' onclick=\"new_task_from_relation('$table_name'); return false;\" data-rel-id='" . $table_attributes['data-new-rel-id'] . "' data-rel-type='" . $table_attributes['data-new-rel-type'] . "'><i class=\"fa-regular fa-plus tw-mr-1\"></i>" . _l('new_task') . '</a>';
         }
     }
 
     if ($table_attributes['data-new-rel-type'] == 'project') {
-        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-success pull-right mbot25'>" . _l('detailed_overview') . '</a>';
-        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default pull-right mbot25 mright5 hidden-xs'>" . _l('view_kanban') . '</a>';
+        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default mright5 mbot15 hidden-xs' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
+        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-success pull-rigsht mbot15'>" . _l('detailed_overview') . '</a>';
         echo '<div class="clearfix"></div>';
         echo $CI->load->view('admin/tasks/_bulk_actions', ['table' => '.table-rel-tasks'], true);
         echo $CI->load->view('admin/tasks/_summary', ['rel_id' => $table_attributes['data-new-rel-id'], 'rel_type' => 'project', 'table' => $table_name], true);
         echo '<a href="#" data-toggle="modal" data-target="#tasks_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-rel-tasks">' . _l('bulk_actions') . '</a>';
     } elseif ($table_attributes['data-new-rel-type'] == 'customer') {
         echo '<div class="clearfix"></div>';
-        echo '<div id="tasks_related_filter">';
+        echo '<div id="tasks_related_filter" class="mtop15">';
         echo '<p class="bold">' . _l('task_related_to') . ': </p>';
 
-        echo '<div class="checkbox checkbox-inline mbot25">
+        echo '<div class="checkbox checkbox-inline">
         <input type="checkbox" checked value="customer" disabled id="ts_rel_to_customer" name="tasks_related_to[]">
         <label for="ts_rel_to_customer">' . _l('client') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="project" id="ts_rel_to_project" name="tasks_related_to[]">
         <label for="ts_rel_to_project">' . _l('projects') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="invoice" id="ts_rel_to_invoice" name="tasks_related_to[]">
         <label for="ts_rel_to_invoice">' . _l('invoices') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="estimate" id="ts_rel_to_estimate" name="tasks_related_to[]">
         <label for="ts_rel_to_estimate">' . _l('estimates') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="contract" id="ts_rel_to_contract" name="tasks_related_to[]">
         <label for="ts_rel_to_contract">' . _l('contracts') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="ticket" id="ts_rel_to_ticket" name="tasks_related_to[]">
         <label for="ts_rel_to_ticket">' . _l('tickets') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="expense" id="ts_rel_to_expense" name="tasks_related_to[]">
         <label for="ts_rel_to_expense">' . _l('expenses') . '</label>
         </div>
 
-        <div class="checkbox checkbox-inline mbot25">
+        <div class="checkbox checkbox-inline">
         <input type="checkbox" value="proposal" id="ts_rel_to_proposal" name="tasks_related_to[]">
         <label for="ts_rel_to_proposal">' . _l('proposals') . '</label>
         </div>';
@@ -399,8 +402,10 @@ function init_relation_tasks_table($table_attributes = [])
     // In this case we need to add new identifier eq task-relation
     $table_attributes['data-last-order-identifier'] = 'tasks';
     $table_attributes['data-default-order']         = get_table_last_order('tasks');
-
-    $table .= render_datatable($table_data, $name, [], $table_attributes);
+    if ($table_attributes['data-new-rel-type'] != 'project') {
+        echo '<hr />';
+    }
+    $table .= render_datatable($table_data, $name, ['number-index-1'], $table_attributes);
 
     return $table;
 }

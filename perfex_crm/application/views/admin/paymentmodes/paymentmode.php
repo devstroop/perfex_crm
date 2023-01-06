@@ -9,20 +9,20 @@
                     <span class="add-title"><?php echo _l('payment_mode_add_heading'); ?></span>
                 </h4>
             </div>
-            <?php echo form_open('admin/paymentmodes/manage',array('id'=>'payment_modes_form')); ?>
+            <?php echo form_open('admin/paymentmodes/manage', ['id' => 'payment_modes_form']); ?>
             <?php echo form_hidden('paymentmodeid'); ?>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo render_input('name','payment_mode_add_edit_name'); ?>
-                        <?php echo render_textarea('description','payment_mode_add_edit_description','',array('data-toggle'=>'tooltip','title'=>'payment_mode_add_edit_description_tooltip','rows'=>5)); ?>
+                        <?php echo render_input('name', 'payment_mode_add_edit_name'); ?>
+                        <?php echo render_textarea('description', 'payment_mode_add_edit_description', '', ['data-toggle' => 'tooltip', 'title' => 'payment_mode_add_edit_description_tooltip', 'rows' => 5]); ?>
                         <div class="checkbox checkbox-primary">
                             <input type="checkbox" name="active" id="active">
                             <label for="active"><?php echo _l('payment_mode_add_edit_active'); ?></label>
                         </div>
                         <div class="checkbox checkbox-primary">
                             <input type="checkbox" name="show_on_pdf" id="show_on_pdf">
-                            <label for="show_on_pdf"><?php echo _l('show_on_invoice_on_pdf',_l('payment_mode_add_edit_description')); ?></label>
+                            <label for="show_on_pdf"><?php echo _l('show_on_invoice_on_pdf', _l('payment_mode_add_edit_description')); ?></label>
                         </div>
                         <div class="checkbox checkbox-primary">
                             <input type="checkbox" name="selected_by_default" id="selected_by_default">
@@ -43,7 +43,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
                 <?php echo form_close(); ?>
             </div>
         </div>
@@ -91,9 +91,9 @@
 
             if (typeof(id) !== 'undefined') {
                 $('input[name="paymentmodeid"]').val(id);
-                var name = $(button).parents('tr').find('td').eq(0).text();
-                var description = $(button).parents('tr').find('td').eq(1).html();
-                var active = $(button).parents('tr').find('td').eq(2).find('input').prop('checked');
+                var name = $(button).parents('tr').find('td').eq(1).text();
+                var description = $(button).parents('tr').find('td').eq(2).html();
+                var active = $(button).parents('tr').find('td').eq(3).find('input').prop('checked');
                 $('#payment_mode_modal input[name="active"]').prop('checked', active);
                 $('#payment_mode_modal input[name="expenses_only"]').prop('checked', expenses_only).change();
                 $('#payment_mode_modal input[name="invoices_only"]').prop('checked', invoices_only).change();

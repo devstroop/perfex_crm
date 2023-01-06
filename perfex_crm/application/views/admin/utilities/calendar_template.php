@@ -6,16 +6,16 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"><?php echo _l('utility_calendar_new_event_title'); ?></h4>
       </div>
-      <?php echo form_open('admin/utilities/calendar',array('id'=>'calendar-event-form')); ?>
+      <?php echo form_open('admin/utilities/calendar', ['id' => 'calendar-event-form']); ?>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
-            <?php echo render_input('title','utility_calendar_new_event_placeholder'); ?>
-            <?php echo render_textarea('description','event_description','',array('rows'=>5)); ?>
-            <?php echo render_datetime_input('start','utility_calendar_new_event_start_date', '', ['data-step' => 30]); ?>
+            <?php echo render_input('title', 'utility_calendar_new_event_placeholder'); ?>
+            <?php echo render_textarea('description', 'event_description', '', ['rows' => 5]); ?>
+            <?php echo render_datetime_input('start', 'utility_calendar_new_event_start_date', '', ['data-step' => 30]); ?>
             <div class="clearfix mtop15"></div>
-            <?php echo render_datetime_input('end','utility_calendar_new_event_end_date', '', ['data-step' => 30]); ?>
-             <?php if(is_email_template_active('event-notification-to-staff')){ ?>
+            <?php echo render_datetime_input('end', 'utility_calendar_new_event_end_date', '', ['data-step' => 30]); ?>
+             <?php if (is_email_template_active('event-notification-to-staff')) { ?>
             <div class="form-group">
              <div class="row">
               <div class="col-md-12">
@@ -24,7 +24,7 @@
               <div class="col-md-6">
                 <div class="input-group">
                   <input type="number" class="form-control" name="reminder_before" value="30" id="reminder_before">
-                  <span class="input-group-addon"><i class="fa fa-question-circle" data-toggle="tooltip" data-title="<?php echo _l('reminder_notification_placeholder'); ?>"></i></span>
+                  <span class="input-group-addon"><i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="<?php echo _l('reminder_notification_placeholder'); ?>"></i></span>
                 </div>
               </div>
               <div class="col-md-6">
@@ -41,21 +41,21 @@
          <hr />
          <p class="bold"><?php echo _l('event_color'); ?></p>
          <?php
-         $event_colors = '';
+         $event_colors     = '';
          $favourite_colors = get_system_favourite_colors();
-         $i = 0;
-         foreach($favourite_colors as $color){
-          $color_selected_class = 'cpicker-small';
-          if($i == 0){
-            $color_selected_class = 'cpicker-big';
-          }
-          $event_colors .= "<div class='calendar-cpicker cpicker ".$color_selected_class."' data-color='".$color."' style='background:".$color.";border:1px solid ".$color."'></div>";
-          $i++;
-        }
+         $i                = 0;
+         foreach ($favourite_colors as $color) {
+             $color_selected_class = 'cpicker-small';
+             if ($i == 0) {
+                 $color_selected_class = 'cpicker-big';
+             }
+             $event_colors .= "<div class='calendar-cpicker cpicker " . $color_selected_class . "' data-color='" . $color . "' style='background:" . $color . ';border:1px solid ' . $color . "'></div>";
+             $i++;
+         }
         echo '<div class="cpicker-wrapper">';
         echo $event_colors;
         echo '</div>';
-        echo form_hidden('color',$favourite_colors[0]);
+        echo form_hidden('color', $favourite_colors[0]);
         ?>
         <div class="clearfix"></div>
         <hr />
@@ -68,7 +68,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-    <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+    <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
   </div>
   <?php echo form_close(); ?>
 </div><!-- /.modal-content -->

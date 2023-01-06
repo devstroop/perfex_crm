@@ -44,35 +44,35 @@ class Projects_model extends App_Model
         $statuses = hooks()->apply_filters('before_get_project_statuses', [
             [
                 'id'             => 1,
-                'color'          => '#989898',
+                'color'          => '#475569',
                 'name'           => _l('project_status_1'),
                 'order'          => 1,
                 'filter_default' => true,
             ],
             [
                 'id'             => 2,
-                'color'          => '#03a9f4',
+                'color'          => '#2563eb',
                 'name'           => _l('project_status_2'),
                 'order'          => 2,
                 'filter_default' => true,
             ],
             [
                 'id'             => 3,
-                'color'          => '#ff6f00',
+                'color'          => '#f97316',
                 'name'           => _l('project_status_3'),
                 'order'          => 3,
                 'filter_default' => true,
             ],
             [
                 'id'             => 4,
-                'color'          => '#84c529',
+                'color'          => '#16a34a',
                 'name'           => _l('project_status_4'),
                 'order'          => 100,
                 'filter_default' => false,
             ],
             [
                 'id'             => 5,
-                'color'          => '#989898',
+                'color'          => '#94a3b8',
                 'name'           => _l('project_status_5'),
                 'order'          => 4,
                 'filter_default' => false,
@@ -566,8 +566,8 @@ class Projects_model extends App_Model
 
     public function add_milestone($data)
     {
-        $data['due_date']                         = to_sql_date($data['due_date']);
-        $data['start_date']                       = to_sql_date($data['start_date']);
+        $data['due_date']                        = to_sql_date($data['due_date']);
+        $data['start_date']                      = to_sql_date($data['start_date']);
         $data['datecreated']                     = date('Y-m-d');
         $data['description']                     = nl2br($data['description']);
         $data['description_visible_to_customer'] = isset($data['description_visible_to_customer']) ? 1 : 0;
@@ -1079,7 +1079,7 @@ class Projects_model extends App_Model
      */
     public function send_project_customer_email($id, $template)
     {
-        $sent = false;
+        $sent     = false;
         $contacts = $this->clients_model->get_contacts_for_project_notifications($id, 'project_emails');
 
         foreach ($contacts as $contact) {
@@ -2131,6 +2131,8 @@ class Projects_model extends App_Model
 
     public function delete($project_id)
     {
+        hooks()->do_action('before_project_deleted', $project_id);
+
         $project_name = get_project_name_by_id($project_id);
 
         $this->db->where('id', $project_id);
@@ -2223,6 +2225,8 @@ class Projects_model extends App_Model
             $this->db->delete(db_prefix() . 'pinned_projects');
 
             log_activity('Project Deleted [ID: ' . $project_id . ', Name: ' . $project_name . ']');
+
+            hooks()->do_action('after_project_deleted', $project_id);
 
             return true;
         }
@@ -2416,7 +2420,7 @@ class Projects_model extends App_Model
         }
 
         if ($action_visible_to_customer == 1) {
-           $contacts = $this->clients_model->get_contacts_for_project_notifications($project_id, 'project_emails');
+            $contacts = $this->clients_model->get_contacts_for_project_notifications($project_id, 'project_emails');
 
             foreach ($contacts as $contact) {
                 if (is_client_logged_in() && $contact['id'] == get_contact_user_id()) {

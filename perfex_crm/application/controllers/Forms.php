@@ -123,7 +123,6 @@ class Forms extends ClientsController
                             'name'  => $field->name,
                             'value' => $post_data[$field->name],
                         ];
-
                     }
 
                     if (isset($field->required)) {
@@ -476,7 +475,7 @@ class Forms extends ClientsController
                     if ((isset($regular_fields['name']) && empty($regular_fields['name'])) || !isset($regular_fields['name'])) {
                         $regular_fields['name'] = 'Unknown';
                     }
-                    $regular_fields['name'] = $form->lead_name_prefix . $regular_fields['name'];
+                    $regular_fields['name']         = $form->lead_name_prefix . $regular_fields['name'];
                     $regular_fields['source']       = $form->lead_source;
                     $regular_fields['addedfrom']    = 0;
                     $regular_fields['lastcontact']  = null;
@@ -705,14 +704,12 @@ class Forms extends ClientsController
     public function ticket()
     {
         $provided_language = $this->input->get('language');
-        $form            = new stdClass();
-        $form->language  = $provided_language ? $provided_language : get_option('active_language');
-        $form->recaptcha = 1;
+        $form              = new stdClass();
+        $form->language    = $provided_language ? $provided_language : get_option('active_language');
+        $form->recaptcha   = 1;
 
         $this->lang->load($form->language . '_lang', $form->language);
-        if (file_exists(APPPATH . 'language/' . $form->language . '/custom_lang.php')) {
-            $this->lang->load('custom_lang', $form->language);
-        }
+        load_custom_lang_file($form->language);
 
         $form->success_submit_msg = _l('success_submit_msg');
 

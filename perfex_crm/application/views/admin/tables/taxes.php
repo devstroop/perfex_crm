@@ -26,7 +26,7 @@ foreach ($rResult as $aRow) {
         $row[] = $_data;
     }
 
-    $options = icon_btn('#' . $aRow['id'], 'pencil-square-o', 'btn-default', [
+    $options = icon_btn('#' . $aRow['id'], 'fa-regular fa-pen-to-square', 'btn-default', [
         'data-toggle'                      => 'modal',
         'data-target'                      => '#tax_modal',
         'data-id'                          => $aRow['id'],
@@ -34,7 +34,7 @@ foreach ($rResult as $aRow) {
         'data-is-referenced-subscriptions' => $is_referenced_subscriptions,
         ]);
 
-    $row[] = $options .= icon_btn('taxes/delete/' . $aRow['id'], 'remove', 'btn-danger _delete');
+    $row[] = $options .= icon_btn('taxes/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
 
     $output['aaData'][] = $row;
 }

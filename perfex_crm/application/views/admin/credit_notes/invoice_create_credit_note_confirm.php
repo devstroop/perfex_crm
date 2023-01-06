@@ -14,7 +14,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-        <a href="#" class="btn btn-info" id="confirm-invoice-credit-note"><?php echo _l('confirm'); ?></a>
+        <a href="#" class="btn btn-primary" id="confirm-invoice-credit-note"><?php echo _l('confirm'); ?></a>
     </div>
 </div>
 </div>

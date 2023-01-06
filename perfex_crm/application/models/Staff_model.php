@@ -395,13 +395,19 @@ class Staff_model extends App_Model
         if (isset($data['fakepasswordremembered'])) {
             unset($data['fakepasswordremembered']);
         }
+
         // First check for all cases if the email exists.
+        $data = hooks()->apply_filters('before_create_staff_member', $data);
+
         $this->db->where('email', $data['email']);
         $email = $this->db->get(db_prefix() . 'staff')->row();
+
         if ($email) {
             die('Email already exists');
         }
+
         $data['admin'] = 0;
+
         if (is_admin()) {
             if (isset($data['administrator'])) {
                 $data['admin'] = 1;

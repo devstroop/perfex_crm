@@ -98,6 +98,7 @@ class Settings extends AdminController
             // Core tabs are not registered
             $data['tab']['slug'] = $tab;
             $data['tab']['view'] = 'admin/settings/includes/' . $tab;
+            $data['tab']['name'] = $tab === 'info' ? _l(' System/Server Info') : _('settings_update');
         }
 
         if (!$data['tab']) {

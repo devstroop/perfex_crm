@@ -28,13 +28,11 @@ function load_pdf_language($clientLanguage)
 
     if (file_exists(APPPATH . 'language/' . $language)) {
         $CI->lang->load($language . '_lang', $language);
-    }
+        load_custom_lang_file($language);
 
-    if (file_exists(APPPATH . 'language/' . $language . '/custom_lang.php')) {
-        $CI->lang->load('custom_lang', $language);
+        $CI->lang->set_last_loaded_language($language);
+        hooks()->do_action('load_pdf_language', ['language' => $language]);
     }
-
-    hooks()->do_action('load_pdf_language', ['language' => $language]);
 }
 
 /**

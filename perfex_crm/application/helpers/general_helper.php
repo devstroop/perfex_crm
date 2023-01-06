@@ -9,6 +9,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
 header('Content-Type: text/html; charset=utf-8');
 
 /**
+ * Load custom lang for the given language
+ *
+ * @since 3.0.0
+ *
+ * @param  string $language
+ *
+ * @return void
+ */
+function load_custom_lang_file($language)
+{
+    $CI = &get_instance();
+    if (file_exists(APPPATH . 'language/' . $language . '/custom_lang.php')) {
+        if (array_key_exists('custom_lang.php', $CI->lang->is_loaded)) {
+            unset($CI->lang->is_loaded['custom_lang.php']);
+        }
+        $CI->lang->load('custom_lang', $language);
+    }
+}
+
+/**
  * Generate short_url
  * @since  Version 2.7.3
  *

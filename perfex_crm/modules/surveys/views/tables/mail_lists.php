@@ -5,12 +5,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $aColumns = [
     'listid',
     'name',
-    db_prefix().'emaillists.datecreated',
+    db_prefix() . 'emaillists.datecreated',
     'creator',
     ];
 
 $sIndexColumn = 'listid';
-$sTable       = db_prefix().'emaillists';
+$sTable       = db_prefix() . 'emaillists';
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [], []);
 $output       = $result['output'];
 $rResult      = $result['rResult'];
@@ -20,19 +20,19 @@ foreach ($rResult as $aRow) {
         $_data = $aRow[$aColumns[$i]];
         if ($aColumns[$i] == 'name') {
             $_data = '<a href="' . admin_url('surveys/mail_list_view/' . $aRow['listid']) . '">' . $_data . '</a>';
-            $_data .= '<p>Total emails: ' . total_rows(db_prefix().'listemails', 'listid=' . $aRow['listid']) . '</p>';
-        } elseif ($aColumns[$i] == db_prefix().'emaillists.datecreated') {
+            $_data .= '<p>Total emails: ' . total_rows(db_prefix() . 'listemails', 'listid=' . $aRow['listid']) . '</p>';
+        } elseif ($aColumns[$i] == db_prefix() . 'emaillists.datecreated') {
             $_data = _dt($_data);
         }
         $row[] = $_data;
     }
     $options = '';
-    $options .= icon_btn('surveys/mail_list_view/' . $aRow['listid'], 'eye');
+    $options .= icon_btn('surveys/mail_list_view/' . $aRow['listid'], 'fa fa-eye');
     if (has_permission('surveys', '', 'edit')) {
-        $options .= icon_btn('surveys/mail_list/' . $aRow['listid'], 'pencil-square-o');
+        $options .= icon_btn('surveys/mail_list/' . $aRow['listid'], 'fa-regular fa-pen-to-square');
     }
     if (has_permission('surveys', '', 'delete')) {
-        $options .= icon_btn('surveys/delete_mail_list/' . $aRow['listid'], 'remove', 'btn-danger _delete');
+        $options .= icon_btn('surveys/delete_mail_list/' . $aRow['listid'], 'fa fa-remove', 'btn-danger _delete');
     }
     $row[] = $options;
 

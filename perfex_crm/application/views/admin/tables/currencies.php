@@ -38,15 +38,15 @@ foreach ($rResult as $aRow) {
         }
         $row[] = $_data;
     }
-    $options = icon_btn('#' . $aRow['id'], 'pencil-square-o', 'btn-default', $attributes);
+    $options = icon_btn('#' . $aRow['id'], 'fa-regular fa-pen-to-square', 'btn-default', $attributes);
 
     if ($aRow['isdefault'] == 0) {
-        $options .= icon_btn('currencies/make_base_currency/' . $aRow['id'], 'star', 'btn-info', [
+        $options .= icon_btn('currencies/make_base_currency/' . $aRow['id'], 'fa fa-star', 'btn-primary', [
             'data-toggle' => 'tooltip',
             'title'       => _l('make_base_currency'),
             ]);
     }
 
-    $row[]              = $options .= icon_btn('currencies/delete/' . $aRow['id'], 'remove', 'btn-danger _delete');
+    $row[]              = $options .= icon_btn('currencies/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
     $output['aaData'][] = $row;
 }

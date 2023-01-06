@@ -45,6 +45,7 @@ function _maybe_sms_gateways_settings_group($groups)
             'name'     => 'SMS',
             'view'     => 'admin/settings/includes/sms',
             'position' => 60,
+            'icon'     => 'fa-regular fa-message',
         ]);
     }
 }

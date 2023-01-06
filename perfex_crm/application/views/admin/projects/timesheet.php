@@ -2,7 +2,7 @@
 <!-- Timesheet Modal -->
 <div class="modal fade" id="timesheet" tabindex="-1" role="dialog">
     <div class="modal-dialog">
-        <?php echo form_open(admin_url('projects/timesheet'),array('id'=>'timesheet_form')); ?>
+        <?php echo form_open(admin_url('projects/timesheet'), ['id' => 'timesheet_form']); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -13,7 +13,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo form_hidden('project_id',$project->id); ?>
+                        <?php echo form_hidden('project_id', $project->id); ?>
                         <?php echo form_hidden('timer_id'); ?>
                         <div id="additional"></div>
                         <div class="row">
@@ -59,7 +59,7 @@
                                         <label class="control-label" for="timesheet_duration">
                                               <?php echo _l('project_timesheet_time_spend'); ?>
                                         </label>
-                                         <i class="fa fa-question-circle pointer" data-toggle="popover" data-html="true" data-content="
+                                         <i class="fa-regular fa-circle-question pointer" data-toggle="popover" data-html="true" data-content="
                                          :15 - 15 <?php echo _l('minutes'); ?><br />
                                          2 - 2 <?php echo _l('hours'); ?><br />
                                          5:5 - 5 <?php echo _l('hours'); ?> & 5 <?php echo _l('minutes'); ?><br />
@@ -67,7 +67,7 @@
                                          "></i>
                                     </div>
                                     <div class="col-md-9">
-                                        <?php echo render_input('timesheet_duration','','','text',array('placeholder'=>'HH:MM')); ?>
+                                        <?php echo render_input('timesheet_duration', '', '', 'text', ['placeholder' => 'HH:MM']); ?>
                                     </div>
                                 </div>
                             </div>
@@ -94,13 +94,13 @@
                                          <div class="form-group">
                                                 <select name="timesheet_task_id" id="timesheet_task_id" class="selectpicker" data-live-search="true" data-width="100%" data-none-selected-text="-">
                                             <option value=""></option>
-                                            <?php $has_permission_create = has_permission('projects','','create');
-                                            foreach($tasks as $task){
-                                                if((!$has_permission_create && !$this->tasks_model->is_task_assignee(get_staff_user_id(),$task['id']))){
+                                            <?php $has_permission_create = has_permission('projects', '', 'create');
+                                            foreach ($tasks as $task) {
+                                                if ((!$has_permission_create && !$this->tasks_model->is_task_assignee(get_staff_user_id(), $task['id']))) {
                                                     continue;
                                                 }
-                                                    echo '<option value="'.$task['id'].'">'.$task['name'].'</option>';
-                                                }
+                                                echo '<option value="' . $task['id'] . '">' . $task['name'] . '</option>';
+                                            }
                                                 ?>
                                         </select>
                                          </div>
@@ -141,7 +141,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
             </div>
         </div>
         <!-- /.modal-content -->

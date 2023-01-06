@@ -144,7 +144,7 @@ foreach ($rResult as $aRow) {
         }
 
         if ($aColumns[$i] == '1') {
-            $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['ticketid'] . '" data-name="'. $aRow['subject'] .'" data-status="'. $aRow['status'] .'"><label></label></div>';
+            $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['ticketid'] . '" data-name="' . $aRow['subject'] . '" data-status="' . $aRow['status'] . '"><label></label></div>';
         } elseif ($aColumns[$i] == 'lastreply') {
             if ($aRow[$aColumns[$i]] == null) {
                 $_data = _l('ticket_no_reply_yet');
@@ -165,9 +165,9 @@ foreach ($rResult as $aRow) {
             if ($aColumns[$i] == 'subject') {
                 $_data .= '<div class="row-options">';
                 $_data .= '<a href="' . $url . '">' . _l('view') . '</a>';
-                $_data .= ' <span class="text-dark"> | </span><a href="' . $url . '?tab=settings">' . _l('edit') . '</a>';
-                $_data .= ' <span class="text-dark"> | </span><a href="' . get_ticket_public_url($aRow) . '" target="_blank">' . _l('view_public_form') . '</a>';
-                $_data .= ' <span class="text-dark"> | </span><a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $_data .= ' | <a href="' . $url . '?tab=settings">' . _l('edit') . '</a>';
+                $_data .= ' | <a href="' . get_ticket_public_url($aRow) . '" target="_blank">' . _l('view_public_form') . '</a>';
+                $_data .= ' | <a href="' . admin_url('tickets/delete/' . $aRow['ticketid']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
                 $_data .= '</div>';
             }
         } elseif ($i == $tagsColumns) {
@@ -183,7 +183,7 @@ foreach ($rResult as $aRow) {
                 $_data = $aRow['ticket_opened_by_name'];
             }
         } elseif ($aColumns[$i] == 'status') {
-            $_data = '<span class="label inline-block ticket-status-' . $aRow['status'] . '" style="border:1px solid ' . $aRow['statuscolor'] . '; color:' . $aRow['statuscolor'] . '">' . ticket_status_translate($aRow['status']) . '</span>';
+            $_data = '<span class="label ticket-status-' . $aRow['status'] . '" style="border:1px solid ' . adjust_hex_brightness($aRow['statuscolor'], 0.4) . '; color:' . $aRow['statuscolor'] . ';background: ' . adjust_hex_brightness($aRow['statuscolor'], 0.04) . ';">' . ticket_status_translate($aRow['status']) . '</span>';
         } elseif ($aColumns[$i] == db_prefix() . 'tickets.date') {
             $_data = _dt($_data);
         } elseif ($aColumns[$i] == 'priority') {

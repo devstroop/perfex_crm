@@ -26,12 +26,15 @@ $custom_fields = get_custom_fields('tasks', [
 ]);
 
 foreach ($custom_fields as $field) {
-    array_push($table_data, $field['name']);
+    array_push($table_data, [
+     'name'     => $field['name'],
+     'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
+ ]);
 }
 
 $table_data = hooks()->apply_filters('tasks_table_columns', $table_data);
 
-render_datatable($table_data, 'tasks', [], [
+render_datatable($table_data, 'tasks', ['number-index-' . isset($bulk_actions) ? 2 : 1], [
         'data-last-order-identifier' => 'tasks',
         'data-default-order'         => get_table_last_order('tasks'),
 ]);

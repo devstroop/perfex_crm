@@ -381,6 +381,7 @@ class Leads_model extends App_Model
             $affectedRows++;
         }
         if ($affectedRows > 0) {
+            hooks()->do_action('after_lead_deleted', $id);
             return true;
         }
 

@@ -43,6 +43,11 @@ class App_assets
         return $this->add($name, $data, $this->themeGroup, $deps);
     }
 
+    public function set($group, $scripts)
+    {
+        $this->registered[$group] = $scripts;
+    }
+
     public function default_theme_group()
     {
         return $this->themeGroup;

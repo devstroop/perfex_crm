@@ -8,9 +8,9 @@
             </div>
             <?php
             if (!isset($template)) {
-                echo form_open('admin/templates/template', array('id' => 'template-form'));
+                echo form_open('admin/templates/template', ['id' => 'template-form']);
             } else {
-                echo form_open('admin/templates/template/' . $id, array('id' => 'template-form'));
+                echo form_open('admin/templates/template/' . $id, ['id' => 'template-form']);
             }
             ?>
             <div class="modal-body">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default close_btn" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                    <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
                 </div>
                 <?php echo form_close(); ?>
             </div>

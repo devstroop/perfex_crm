@@ -37,7 +37,7 @@ foreach ($rResult as $aRow) {
             $_data = '<a href="' . admin_url('projects/view/' . $aRow['id']) . '">' . $_data . '</a>';
         } elseif ($aColumns[$i] == 'status') {
             $status = get_project_status_by_id($_data);
-            $status = '<span class="label label inline-block project-status-' . $_data . '" style="color:' . $status['color'] . ';border:1px solid ' . $status['color'] . '">' . $status['name'] . '</span>';
+            $status = '<span class="label label project-status-' . $_data . '" style="color:' . $status['color'] . ';border:1px solid ' . $status['color'] . '">' . $status['name'] . '</span>';
             $_data  = $status;
         }
 

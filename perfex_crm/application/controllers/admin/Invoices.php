@@ -299,6 +299,14 @@ class Invoices extends AdminController
                 if (!has_permission('invoices', '', 'create')) {
                     access_denied('invoices');
                 }
+                if (hooks()->apply_filters('validate_invoice_number', true)) {
+                    $number = ltrim($invoice_data['number'], '0');
+                    if (total_rows(db_prefix() . 'invoices', 'number=' . $number)) {
+                        set_alert('warning', _l('invoice_number_exists'));
+                        redirect(admin_url('invoices/invoice'));
+                    }
+                }
+
                 $id = $this->invoices_model->add($invoice_data);
                 if ($id) {
                     set_alert('success', _l('added_successfully', _l('invoice')));
@@ -315,6 +323,13 @@ class Invoices extends AdminController
             } else {
                 if (!has_permission('invoices', '', 'edit')) {
                     access_denied('invoices');
+                }
+                $number = trim(ltrim($invoice_data['number'], '0'));
+                if (hooks()->apply_filters('validate_invoice_number', true)) {
+                    if (total_rows(db_prefix() . 'invoices', "id != $id and number = $number")) {
+                        set_alert('warning', _l('invoice_number_exists'));
+                        redirect(admin_url('invoices/invoice/' . $id));
+                    }
                 }
                 $success = $this->invoices_model->update($invoice_data, $id);
                 if ($success) {

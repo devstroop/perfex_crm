@@ -1,58 +1,70 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<?php if(!isset($column)){
-  $column = 'col-md-5ths';
-}
-?>
-<div class="staff_logged_time" data-toggle="tooltip" data-title="<?php echo _l('task_timesheets'); ?>" data-placement="left">
- <div class="<?php echo $column; ?> col-sm-6 col-xs-12 total-column">
-   <div class="panel_s">
-    <div class="panel-body">
-     <h3 class="text-muted _total">
-       <?php echo seconds_to_time_format($logged_time['total']); ?>
-     </h3>
-     <span class="staff_logged_time_text text-success"><?php echo _l('staff_stats_total_logged_time'); ?></span>
-   </div>
- </div>
+<div class="staff_logged_time" data-toggle="tooltip" data-title="<?php echo _l('task_timesheets'); ?>"
+    data-placement="top">
+    <dl class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-5 tw-gap-3 sm:tw-gap-5">
+        <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
+            <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
+                <dt class="tw-font-medium text-success">
+                    <?php echo _l('staff_stats_total_logged_time'); ?>
+                </dt>
+                <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+                    <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
+                        <?php echo seconds_to_time_format($logged_time['total']); ?>
+                    </div>
+                </dd>
+            </div>
+        </div>
+
+        <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
+            <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
+                <dt class="tw-font-medium text-info">
+                    <?php echo _l('staff_stats_last_month_total_logged_time'); ?>
+                </dt>
+                <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+                    <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
+                        <?php echo seconds_to_time_format($logged_time['last_month']); ?>
+                    </div>
+                </dd>
+            </div>
+        </div>
+
+        <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
+            <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
+                <dt class="tw-font-medium text-success">
+                    <?php echo _l('staff_stats_this_month_total_logged_time'); ?>
+                </dt>
+                <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+                    <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
+                        <?php echo seconds_to_time_format($logged_time['this_month']); ?>
+                    </div>
+                </dd>
+            </div>
+        </div>
+
+        <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
+            <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
+                <dt class="tw-font-medium text-info">
+                    <?php echo _l('staff_stats_last_week_total_logged_time'); ?>
+                </dt>
+                <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+                    <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
+                        <?php echo seconds_to_time_format($logged_time['last_week']); ?>
+                    </div>
+                </dd>
+            </div>
+        </div>
+
+        <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
+            <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
+                <dt class="tw-font-medium text-success">
+                    <?php echo _l('staff_stats_this_week_total_logged_time'); ?>
+                </dt>
+                <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+                    <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
+                        <?php echo seconds_to_time_format($logged_time['this_week']); ?>
+                    </div>
+                </dd>
+            </div>
+        </div>
+    </dl>
 </div>
-<div class="<?php echo $column; ?> col-sm-6 col-xs-12 total-column">
- <div class="panel_s">
-  <div class="panel-body">
-   <h3 class="text-muted _total">
-     <?php echo seconds_to_time_format($logged_time['last_month']); ?>
-   </h3>
-   <span class="staff_logged_time_text text-info"><?php echo _l('staff_stats_last_month_total_logged_time'); ?></span>
- </div>
-</div>
-</div>
-<div class="<?php echo $column; ?> col-sm-6 col-xs-12 total-column">
- <div class="panel_s">
-  <div class="panel-body">
-   <h3 class="text-muted _total">
-    <?php echo seconds_to_time_format($logged_time['this_month']); ?>
-  </h3>
-  <span class="staff_logged_time_text text-success"><?php echo _l('staff_stats_this_month_total_logged_time'); ?></span>
-</div>
-</div>
-</div>
-<div class="<?php echo $column; ?> col-sm-6 col-xs-12 total-column">
- <div class="panel_s">
-  <div class="panel-body">
-   <h3 class="text-muted _total">
-     <?php echo seconds_to_time_format($logged_time['last_week']); ?>
-   </h3>
-   <span class="staff_logged_time_text text-info"><?php echo _l('staff_stats_last_week_total_logged_time'); ?></span>
- </div>
-</div>
-</div>
-<div class="<?php echo $column; ?> col-sm-6 col-xs-12 total-column">
- <div class="panel_s">
-  <div class="panel-body">
-   <h3 class="text-muted _total">
-     <?php echo seconds_to_time_format($logged_time['this_week']); ?>
-   </h3>
-   <span class="staff_logged_time_text text-success"><?php echo _l('staff_stats_this_week_total_logged_time'); ?></span>
- </div>
-</div>
-</div>
-</div>
-<div class="clearfix"></div>

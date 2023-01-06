@@ -135,8 +135,17 @@ class Paypal_checkout_gateway extends App_gateway
     private function get_billing_info($invoice)
     {
         $country = null;
+
         if ($invoice->billing_country) {
             $country = get_country($invoice->billing_country);
+        } elseif ($companyCountry = get_option('invoice_company_country_code')) {
+            $countryArray = collect(get_all_countries())->first(function ($country) use ($companyCountry) {
+                return in_array($companyCountry, [$country['iso2'], $country['short_name'], $country['long_name']]);
+            });
+
+            if ($countryArray) {
+                $country = (object) $countryArray;
+            }
         }
 
         /*
@@ -182,10 +191,16 @@ class Paypal_checkout_gateway extends App_gateway
             $billing_address['country_code'] = $country->iso2; // country code
         }
 
+        // Paypal throws an error when billing address is provided but missing country and the popup not open
+        // in this case, we will clear the billing address, the user must enter them manually
+        if (! $country && count(array_filter($billing_address)) !== 0) {
+            $billing_address = [];
+        }
+
         $name = [
-                    'given_name' => (is_client_logged_in() ? $GLOBALS['contact']->firstname : null),
-                    'surname'    => (is_client_logged_in() ? $GLOBALS['contact']->lastname : null),
-                ];
+            'given_name' => (is_client_logged_in() ? $GLOBALS['contact']->firstname : null),
+            'surname'    => (is_client_logged_in() ? $GLOBALS['contact']->lastname : null),
+        ];
 
         if (!empty($name['given_name'])) {
             $payer['name'] = $name;

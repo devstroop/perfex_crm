@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<?php if((credits_can_be_applied_to_invoice($invoice->status) && $credits_available > 0)) { ?>
+<?php if ((credits_can_be_applied_to_invoice($invoice->status) && $credits_available > 0)) { ?>
 <!-- Modal Apply Credits -->
 <div class="modal fade apply-credits-from-invoice" id="apply_credits" data-balance-due="<?php echo $invoice->total_left_to_pay; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
   <div class="modal-dialog modal-lg" role="document">
-    <?php echo form_open(admin_url('invoices/apply_credits/'.$invoice->id),array('id'=>'apply_credits_form')); ?>
+    <?php echo form_open(admin_url('invoices/apply_credits/' . $invoice->id), ['id' => 'apply_credits_form']); ?>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -19,9 +19,9 @@
                     <th><span class="bold"><?php echo _l('credit_note'); ?> #</span></th>
                     <th><span class="bold"><?php echo _l('credit_note_date'); ?></span></th>
                     <?php
-                        $custom_fields = get_custom_fields('credit_note',array('show_on_table'=>1));
-                        foreach($custom_fields as $field){
-                          echo '<td class="bold">' . $field['name'] .'</td>';
+                        $custom_fields = get_custom_fields('credit_note', ['show_on_table' => 1]);
+                        foreach ($custom_fields as $field) {
+                            echo '<td class="bold">' . $field['name'] . '</td>';
                         }
                     ?>
                     <th><span class="bold"><?php echo _l('credit_amount'); ?></span></th>
@@ -30,13 +30,13 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($open_credits as $credit) { ?>
+                <?php foreach ($open_credits as $credit) { ?>
                 <tr>
-                    <td><a href="<?php echo admin_url('credit_notes/list_credit_notes/'.$credit['id']); ?>" target="_blank"><?php echo format_credit_note_number($credit['id']); ?></a></td>
+                    <td><a href="<?php echo admin_url('credit_notes/list_credit_notes/' . $credit['id']); ?>" target="_blank"><?php echo format_credit_note_number($credit['id']); ?></a></td>
                     <td><?php echo _d($credit['date']); ?></td>
                     <?php
-                        foreach($custom_fields as $field){
-                          echo '<td>' .get_custom_field_value($credit['id'],$field['id'],'credit_note') .'</td>';
+                        foreach ($custom_fields as $field) {
+                            echo '<td>' . get_custom_field_value($credit['id'], $field['id'], 'credit_note') . '</td>';
                         }
                     ?>
                     <td><?php echo app_format_money($credit['total'], $customer_currency) ?></td>
@@ -74,7 +74,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-    <button type="submit" class="btn btn-info"><?php echo _l('apply'); ?></button>
+    <button type="submit" class="btn btn-primary"><?php echo _l('apply'); ?></button>
 </div>
 </div>
 <?php echo form_close(); ?>

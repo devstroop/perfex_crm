@@ -205,10 +205,7 @@ function load_admin_language($staff_id = '')
     }
 
     $CI->lang->load($language . '_lang', $language);
-    if (file_exists(APPPATH . 'language/' . $language . '/custom_lang.php')) {
-        $CI->lang->load('custom_lang', $language);
-    }
-
+    load_custom_lang_file($language);
     $GLOBALS['language'] = $language;
     $GLOBALS['locale']   = get_locale_key($language);
 

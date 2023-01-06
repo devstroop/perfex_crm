@@ -143,7 +143,7 @@ foreach ($rResult as $aRow) {
     $amount = app_format_money($aRow['total'], $aRow['currency_name']);
 
     if ($aRow['invoiceid']) {
-        $amount .= '<br /><span class="hide"> - </span><span class="text-success">' . _l('estimate_invoiced') . '</span>';
+        $amount .= '<br /><span class="hide"> - </span><span class="text-success tw-text-sm">' . _l('estimate_invoiced') . '</span>';
     }
 
     $row[] = $amount;

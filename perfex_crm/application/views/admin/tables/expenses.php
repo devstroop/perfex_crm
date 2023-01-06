@@ -57,7 +57,7 @@ if (count($custom_fields) > 4) {
 
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
     'billable',
-    db_prefix().'currencies.name as currency_name',
+    db_prefix() . 'currencies.name as currency_name',
     db_prefix() . 'expenses.clientid',
     'tax',
     'tax2',
@@ -84,23 +84,23 @@ foreach ($rResult as $aRow) {
         $categoryOutput = '<a href="' . admin_url('expenses/list_expenses/' . $aRow['id']) . '" onclick="init_expense(' . $aRow['id'] . ');return false;">' . $aRow['category_name'] . '</a>';
     }
 
-    if ($aRow['recurring'] == 1) {
-        $categoryOutput .= '<br /><span class="label label-primary inline-block mtop4"> ' . _l('expense_recurring_indicator') . '</span>';
-    }
-
     if ($aRow['billable'] == 1) {
         if ($aRow['invoiceid'] == null) {
-            $categoryOutput .= ' <p class="text-danger">' . _l('expense_list_unbilled') . '</p>';
+            $categoryOutput .= ' <p class="text-danger tw-text-sm tw-mb-1">' . _l('expense_list_unbilled') . '</p>';
         } else {
             if (total_rows(db_prefix() . 'invoices', [
                 'id' => $aRow['invoiceid'],
                 'status' => 2,
                 ]) > 0) {
-                $categoryOutput .= ' <p class="text-success">' . _l('expense_list_billed') . '</p>';
+                $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1">' . _l('expense_list_billed') . '</p>';
             } else {
-                $categoryOutput .= ' <p class="text-success">' . _l('expense_list_invoice') . '</p>';
+                $categoryOutput .= ' <p class="text-success tw-text-sm tw-mb-1">' . _l('expense_list_invoice') . '</p>';
             }
         }
+    }
+
+    if ($aRow['recurring'] == 1) {
+        $categoryOutput .= '<span class="label label-primary"> ' . _l('expense_recurring_indicator') . '</span>';
     }
 
     $categoryOutput .= '<div class="row-options">';

@@ -83,7 +83,7 @@
      var proposalsReportTable = $(this).DataTable();
      var sums = proposalsReportTable.ajax.json().sums;
       add_common_footer_sums($(this), sums);
-      <?php foreach($proposal_taxes as $key => $tax){ ?>
+      <?php foreach ($proposal_taxes as $key => $tax) { ?>
         $(this).find('tfoot td.total_tax_single_<?php echo $key; ?>').html(sums['total_tax_single_<?php echo $key; ?>']);
      <?php } ?>
    });
@@ -94,7 +94,7 @@
      add_common_footer_sums($(this),sums);
      $(this).find('tfoot td.amount_open').html(sums.amount_open);
      $(this).find('tfoot td.applied_credits').html(sums.applied_credits);
-     <?php foreach($invoice_taxes as $key => $tax){ ?>
+     <?php foreach ($invoice_taxes as $key => $tax) { ?>
         $(this).find('tfoot td.total_tax_single_<?php echo $key; ?>').html(sums['total_tax_single_<?php echo $key; ?>']);
      <?php } ?>
    });
@@ -105,7 +105,7 @@
        add_common_footer_sums($(this),sums);
        $(this).find('tfoot td.refund_amount').html(sums.refund_amount);
        $(this).find('tfoot td.remaining_amount').html(sums.remaining_amount);
-       <?php foreach($credit_note_taxes as $key => $tax){ ?>
+       <?php foreach ($credit_note_taxes as $key => $tax) { ?>
           $(this).find('tfoot td.total_tax_single_<?php echo $key; ?>').html(sums['total_tax_single_<?php echo $key; ?>']);
        <?php } ?>
    });
@@ -114,7 +114,7 @@
      var estimatesReportsTable = $(this).DataTable();
      var sums = estimatesReportsTable.ajax.json().sums;
      add_common_footer_sums($(this),sums);
-     <?php foreach($estimate_taxes as $key => $tax){ ?>
+     <?php foreach ($estimate_taxes as $key => $tax) { ?>
         $(this).find('tfoot td.total_tax_single_<?php echo $key; ?>').html(sums['total_tax_single_<?php echo $key; ?>']);
      <?php } ?>
    });
@@ -146,6 +146,9 @@
    if (report_wrapper.hasClass('hide')) {
         report_wrapper.removeClass('hide');
    }
+
+   $('.reports').find('a').attr('data-active', false)
+   $(e).attr('data-active', true)
 
    $('head title').html($(e).text());
    $('.customers-group-gen').addClass('hide');

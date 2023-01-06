@@ -78,7 +78,7 @@ foreach ($rResult as $aRow) {
             }
 
             if ($user_removed_as_assignee == 1) {
-                $_data .= '<span class="hidden"> - </span> <span class="mtop5 pull-right" data-toggle="tooltip" data-title="' . _l('project_activity_task_assignee_removed') . '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>';
+                $_data .= '<span class="hidden"> - </span> <span class="mtop5 pull-right" data-toggle="tooltip" data-title="' . _l('project_activity_task_assignee_removed') . '"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i></span>';
             }
             $_data .= '</div>';
         } elseif ($aColumns[$i] == 'task_id') {
@@ -141,7 +141,7 @@ foreach ($rResult as $aRow) {
             }
 
             $attrs['data-end_time'] = _dt($aRow['end_time'], true);
-            $icon_btn               = icon_btn('#', 'pencil-square-o', $btn_icon_class, $attrs);
+            $icon_btn               = icon_btn('#', 'fa-regular fa-pen-to-square', $btn_icon_class, $attrs);
             if ($aRow['status'] == Tasks_model::STATUS_COMPLETE) {
                 $icon_btn = '<span data-toggle="tooltip" data-title="' . _l('task_edit_delete_timesheet_notice', [($task_is_billed ? _l('task_billed') : _l('task_status_5')), _l('edit')]) . '">' . $icon_btn . '</span>';
             }
@@ -163,12 +163,12 @@ foreach ($rResult as $aRow) {
                     data-content='" . render_textarea('timesheet_note') . '
                     <button type="button"
                     onclick="timer_action(this, ' . $aRow['task_id'] . ', ' . $aRow['id'] . ', ' . $adminStop . ');"
-                    class="btn btn-info btn-xs">' . _l('save')
+                    class="btn btn-primary btn-sm">' . _l('save')
                     . "</button>'
                     class=\"text-danger\"
                     onclick=\"return false;\">
                     <span data-toggle=\"tooltip\" data-title='" . _l('timesheet_stop_timer') . "'>
-                          <i class=\"fa fa-clock-o\"></i>
+                          <i class=\"fa-regular fa-clock\"></i>
                           </span>
                     </a>'";
         }
@@ -183,7 +183,7 @@ foreach ($rResult as $aRow) {
             $attrs['disabled'] = true;
         }
 
-        $icon_btn = icon_btn('tasks/delete_timesheet/' . $aRow['id'], 'remove', $btn_icon_class, $attrs);
+        $icon_btn = icon_btn('tasks/delete_timesheet/' . $aRow['id'], 'fa fa-remove', $btn_icon_class, $attrs);
         if ($task_is_billed) {
             $icon_btn = '<span data-toggle="tooltip" data-title="' . _l('task_edit_delete_timesheet_notice', [
                 _l('task_billed'),

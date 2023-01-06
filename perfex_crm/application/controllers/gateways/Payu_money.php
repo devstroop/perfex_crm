@@ -86,7 +86,7 @@ class Payu_money extends App_Controller
         } else {
             if ($hashInfo['status'] == 'success') {
                 if (total_rows('invoicepaymentrecords', ['transactionid' => $hashInfo['txnid']]) === 0) {
-                  $success = $this->payu_money_gateway->addPayment([
+                    $success = $this->payu_money_gateway->addPayment([
                     'amount'        => $hashInfo['amount'],
                     'invoiceid'     => $invoiceid,
                     'transactionid' => $hashInfo['txnid'],
@@ -133,84 +133,99 @@ class Payu_money extends App_Controller
 
         redirect(site_url('invoice/' . $invoiceid . '/' . $hash));
     }
+
     public function get_html($data)
     {
         ob_start(); ?>
-       <?php echo payment_gateway_head(_l('payment_for_invoice') . ' ' . format_invoice_number($data['invoice']->id)); ?>
-         <body onload="submitPayuForm()" class="gateway-payu-money">
-           <div class="container">
-              <div class="col-md-8 col-md-offset-2 mtop30">
-                 <div class="mbot30 text-center">
-                    <?php echo payment_gateway_logo(); ?>
-                 </div>
-                 <div class="row">
-                    <div class="panel_s">
-                       <div class="panel-body">
-                          <h3 class="no-margin">
-                             <b><?php echo _l('payment_for_invoice'); ?> </b>
-                             <a href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
-                             <b><?php echo format_invoice_number($data['invoice']->id); ?></b>
-                             </a>
-                          </h3>
-                          <h4><?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?></h4>
-                          <hr />
-                          <?php echo form_open($data['action_url'], ['novalidate' => true, 'id' => 'payu_money_form']); ?>
-                          <input type="hidden" name="key" value="<?php echo $data['key'] ?>" />
-                          <input type="hidden" name="hash" value="<?php echo $data['hash'] ?>"/>
-                          <input type="hidden" name="txnid" value="<?php echo $data['txnid'] ?>" />
-                          <input type="hidden" name="amount" value="<?php echo $data['total'] ?>" />
-                          <input type="hidden" name="surl" value="<?php echo site_url('gateways/payu_money/success?invoiceid=' . $data['invoice']->id . '&hash=' . $data['invoice']->hash); ?>" />
-                          <input type="hidden" name="furl" value="<?php echo site_url('gateways/payu_money/failure?invoiceid=' . $data['invoice']->id . '&hash=' . $data['invoice']->hash); ?>" />
-                          <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
-                          <input type="hidden" name="productinfo" value="<?php echo str_replace('{invoice_number}', format_invoice_number($data['invoice']->id), $this->payu_money_gateway->getSetting('description_dashboard')); ?>" />
-                          <div class="form-group">
-                             <label for="first_name"> <?php echo _l('client_firstname'); ?></label>
-                             <input type="text" class="form-control" id="first_name" name="firstname" value="<?php echo $data['firstname']; ?>" required>
-                          </div>
-                          <div class="form-group">
-                             <label for="last_name"> <?php echo _l('client_lastname'); ?></label>
-                             <input type="text" class="form-control" id="last_name" name="lastname" value="<?php echo $data['lastname']; ?>">
-                          </div>
-                          <div class="form-group">
-                             <label for="email"> <?php echo _l('client_email'); ?> </label>
-                             <input type="email" class="form-control" id="email" name="email" value="<?php echo $data['email']; ?>" required>
-                          </div>
-                          <div class="form-group">
-                             <label for="phone"> <?php echo _l('client_phonenumber'); ?></label>
-                             <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $data['phonenumber']; ?>" required>
-                          </div>
-                          <?php if (!$data['hash']) { ?>
-                            <input type="submit" class="btn btn-info" value="<?php echo _l('submit_payment'); ?>" />
-                          <?php } ?>
-                          </form>
-                       </div>
+<?php echo payment_gateway_head(_l('payment_for_invoice') . ' ' . format_invoice_number($data['invoice']->id)); ?>
+
+<body onload="submitPayuForm()" class="gateway-payu-money">
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2 mtop30">
+            <div class="mbot30 text-center">
+                <?php echo payment_gateway_logo(); ?>
+            </div>
+            <div class="row">
+                <?php echo form_open($data['action_url'], ['novalidate' => true, 'id' => 'payu_money_form']); ?>
+                <div class="panel_s">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <?php echo _l('payment_for_invoice'); ?> -
+                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                        </h4>
+                        <a
+                            href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
+                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                        </a>
                     </div>
-                 </div>
-              </div>
-           </div>
-           <?php echo payment_gateway_scripts(); ?>
-           <script>
-             $(function(){
-                   $('#payu_money_form').validate({submitHandler:function(form){
-                     $('input[type="submit"]').prop('disabled',true);
-                     return true;
-                   }});
-              });
-               var hash = '<?php echo $data['hash']; ?>';
-               function submitPayuForm() {
-                 if(hash == '') {
-                       return;
-                 }
-                 var payu_money_form = document.forms.payu_money_form;
-                 payu_money_form.submit();
-               }
-           </script>
-           <?php echo payment_gateway_footer(); ?>
-        <?php
+                    <div class="panel-body">
+                        <input type="hidden" name="key" value="<?php echo $data['key'] ?>" />
+                        <input type="hidden" name="hash" value="<?php echo $data['hash'] ?>" />
+                        <input type="hidden" name="txnid" value="<?php echo $data['txnid'] ?>" />
+                        <input type="hidden" name="amount" value="<?php echo $data['total'] ?>" />
+                        <input type="hidden" name="surl"
+                            value="<?php echo site_url('gateways/payu_money/success?invoiceid=' . $data['invoice']->id . '&hash=' . $data['invoice']->hash); ?>" />
+                        <input type="hidden" name="furl"
+                            value="<?php echo site_url('gateways/payu_money/failure?invoiceid=' . $data['invoice']->id . '&hash=' . $data['invoice']->hash); ?>" />
+                        <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
+                        <input type="hidden" name="productinfo"
+                            value="<?php echo str_replace('{invoice_number}', format_invoice_number($data['invoice']->id), $this->payu_money_gateway->getSetting('description_dashboard')); ?>" />
+                        <div class="form-group">
+                            <label for="first_name"> <?php echo _l('client_firstname'); ?></label>
+                            <input type="text" class="form-control" id="first_name" name="firstname"
+                                value="<?php echo $data['firstname']; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name"> <?php echo _l('client_lastname'); ?></label>
+                            <input type="text" class="form-control" id="last_name" name="lastname"
+                                value="<?php echo $data['lastname']; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="email"> <?php echo _l('client_email'); ?> </label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="<?php echo $data['email']; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"> <?php echo _l('client_phonenumber'); ?></label>
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                value="<?php echo $data['phonenumber']; ?>" required>
+                        </div>
+                    </div>
+                    <?php if (!$data['hash']) { ?>
+                    <div class="panel-footer text-right">
+                        <input type="submit" class="btn btn-primary" value="<?php echo _l('submit_payment'); ?>" />
+                    </div>
+                    <?php } ?>
+                </div>
+                <?php echo form_close(); ?>
+            </div>
+        </div>
+    </div>
+    <?php echo payment_gateway_scripts(); ?>
+    <script>
+    $(function() {
+        $('#payu_money_form').validate({
+            submitHandler: function(form) {
+                $('input[type="submit"]').prop('disabled', true);
+                return true;
+            }
+        });
+    });
+    var hash = '<?php echo $data['hash']; ?>';
+
+    function submitPayuForm() {
+        if (hash == '') {
+            return;
+        }
+        var payu_money_form = document.forms.payu_money_form;
+        payu_money_form.submit();
+    }
+    </script>
+    <?php echo payment_gateway_footer(); ?>
+    <?php
         $contents = ob_get_contents();
         ob_end_clean();
 
         return $contents;
     }
-
 }

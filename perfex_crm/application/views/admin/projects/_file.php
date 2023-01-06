@@ -29,7 +29,7 @@
                      } ?>
                   <?php if (!empty($file->external) && $file->external == 'dropbox') {
                          ?>
-                     <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-info mbot20">
+                     <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-primary mbot20">
                         <i class="fa fa-dropbox" aria-hidden="true"></i>
                         <?php echo _l('open_in_dropbox'); ?>
                      </a>
@@ -37,8 +37,8 @@
                   <?php
                      } elseif (!empty($file->external) && $file->external == 'gdrive') {
                          ?>
-                     <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-info mbot20">
-                           <i class="fa fa-google" aria-hidden="true"></i>
+                     <a href="<?php echo $file->external_link; ?>" target="_blank" class="btn btn-primary mbot20">
+                           <i class="fa-brands fa-google" aria-hidden="true"></i>
                            <?php echo _l('open_in_google'); ?>
                      </a>
                      <br />
@@ -68,7 +68,7 @@
                          echo $previewMarkdown;
                      } else {
                          if (empty($file->external)) {
-                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download="' .  $file->original_file_name . '">' . $file->file_name . '</a>';
+                             echo '<a href="' . site_url('uploads/projects/' . $file->project_id . '/' . $file->file_name) . '" download="' . $file->original_file_name . '">' . $file->file_name . '</a>';
                          } else {
                              echo '<a href="' . $file->external_link . '" target="_blank">' . $file->file_name . '</a>';
                          }

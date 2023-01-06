@@ -22,18 +22,20 @@ function get_estimate_shortlink($estimate)
 
     // Create short link and return the newly created short link
     $short_link = app_generate_short_link([
-        'long_url'  => $long_url,
-        'title'     => format_estimate_number($estimate->id)
+        'long_url' => $long_url,
+        'title'    => format_estimate_number($estimate->id),
     ]);
 
     if ($short_link) {
         $CI = &get_instance();
         $CI->db->where('id', $estimate->id);
         $CI->db->update(db_prefix() . 'estimates', [
-            'short_link' => $short_link
+            'short_link' => $short_link,
         ]);
+
         return $short_link;
     }
+
     return $long_url;
 }
 
@@ -226,8 +228,14 @@ function is_last_estimate($id)
 function format_estimate_number($id)
 {
     $CI = &get_instance();
-    $CI->db->select('date,number,prefix,number_format')->from(db_prefix() . 'estimates')->where('id', $id);
-    $estimate = $CI->db->get()->row();
+
+    if (! is_object($id)) {
+        $CI->db->select('date,number,prefix,number_format')->from(db_prefix() . 'estimates')->where('id', $id);
+        $estimate = $CI->db->get()->row();
+    } else {
+        $estimate = $id;
+        $id       = $estimate->id;
+    }
 
     if (!$estimate) {
         return '';
@@ -312,7 +320,7 @@ function get_estimates_percent_by_status($status, $project_id = null)
 
 function get_estimates_where_sql_for_staff($staff_id)
 {
-    $CI = &get_instance();
+    $CI                                  = &get_instance();
     $has_permission_view_own             = has_permission('estimates', '', 'view_own');
     $allow_staff_view_estimates_assigned = get_option('allow_staff_view_estimates_assigned');
     $whereUser                           = '';

@@ -9,12 +9,12 @@
          </div>
          <div class="modal-body">
             <p class="bold"><?php echo _l('security_reasons_re_enter_password'); ?></p>
-            <?php echo render_input('user_password','','','password',array('data-ays-ignore'=>'true')); ?>
+            <?php echo render_input('user_password', '', '', 'password', ['data-ays-ignore' => 'true']); ?>
             <input type="hidden" name="id" data-ays-ignore="true">
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-            <button type="submit" class="btn btn-info"><?php echo _l('confirm'); ?></button>
+            <button type="submit" class="btn btn-primary"><?php echo _l('confirm'); ?></button>
          </div>
       </div>
       <!-- /.modal-content -->

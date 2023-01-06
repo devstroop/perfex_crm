@@ -16,7 +16,8 @@ $(function() {
                 done();
             },
             success: function(file, response) {
-                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length ===
+                    0) {
                     window.location.reload();
                 }
             }
@@ -29,11 +30,11 @@ $(function() {
     }
 
     $('a[href="#customer_admins"]').on('click', function() {
-        $('.btn-bottom-toolbar').addClass('hide');
+        $('#profile-save-section').addClass('hide');
     });
 
     $('.profile-tabs a').not('a[href="#customer_admins"]').on('click', function() {
-        $('.btn-bottom-toolbar').removeClass('hide');
+        $('#profile-save-section').removeClass('hide');
     });
 
     $("input[name='tasks_related_to[]']").on('change', function() {
@@ -52,7 +53,7 @@ $(function() {
 
     // consents=CONTACT_ID
     var consents = get_url_param('consents');
-    if(consents){
+    if (consents) {
         view_contact_consent(consents);
     }
 
@@ -100,23 +101,26 @@ $(function() {
     /* Customer profile tickets table */
     $('.table-tickets-single').find('#th-submitter').removeClass('toggleable');
 
-    initDataTable('.table-tickets-single', admin_url + 'tickets/index/false/' + customer_id, undefined, undefined, 'undefined', [$('table thead .ticket_created_column').index(), 'desc']);
+    initDataTable('.table-tickets-single', admin_url + 'tickets/index/false/' + customer_id, undefined,
+        undefined, 'undefined', [$('table thead .ticket_created_column').index(), 'desc']);
 
     /* Customer profile contracts table */
-    initDataTable('.table-contracts-single-client', admin_url + 'contracts/table/' + customer_id, undefined,undefined, 'undefined', [6, 'desc']);
+    initDataTable('.table-contracts-single-client', admin_url + 'contracts/table/' + customer_id, undefined,
+        undefined, 'undefined', [6, 'desc']);
 
     /* Custome profile contacts table */
     var contactsNotSortable = [];
-    <?php if(is_gdpr() && get_option('gdpr_enable_consent_for_contacts') == '1'){ ?>
-        contactsNotSortable.push($('#th-consent').index());
+    <?php if (is_gdpr() && get_option('gdpr_enable_consent_for_contacts') == '1') { ?>
+    contactsNotSortable.push($('#th-consent').index());
     <?php } ?>
-    _table_api = initDataTable('.table-contacts', admin_url + 'clients/contacts/' + customer_id, contactsNotSortable, contactsNotSortable);
-    if(_table_api) {
-          <?php if(is_gdpr() && get_option('gdpr_enable_consent_for_contacts') == '1'){ ?>
-        _table_api.on('draw', function () {
+    _table_api = initDataTable('.table-contacts', admin_url + 'clients/contacts/' + customer_id,
+        contactsNotSortable, contactsNotSortable);
+    if (_table_api) {
+        <?php if (is_gdpr() && get_option('gdpr_enable_consent_for_contacts') == '1') { ?>
+        _table_api.on('draw', function() {
             var tableData = $('.table-contacts').find('tbody tr');
             $.each(tableData, function() {
-                $(this).find('td:eq(1)').addClass('bg-light-gray');
+                $(this).find('td:eq(1)').addClass('bg-neutral');
             });
         });
         <?php } ?>
@@ -131,7 +135,9 @@ $(function() {
             [0, 'desc']
         ]);
 
-   initDataTable('.table-credit-notes', admin_url+'credit_notes/table/'+customer_id, ['undefined'], ['undefined'], undefined, [0, 'desc']);
+    initDataTable('.table-credit-notes', admin_url + 'credit_notes/table/' + customer_id, ['undefined'], [
+        'undefined'
+    ], undefined, [0, 'desc']);
 
     /* Customer profile Estimates table */
     initDataTable('.table-estimates-single-client',
@@ -149,7 +155,8 @@ $(function() {
         'undefined', [0, 'desc']);
 
     /* Customer profile reminders table */
-    initDataTable('.table-reminders', admin_url + 'misc/get_reminders/' + customer_id + '/' + 'customer', undefined, undefined, undefined, [1, 'asc']);
+    initDataTable('.table-reminders', admin_url + 'misc/get_reminders/' + customer_id + '/' + 'customer',
+        undefined, undefined, undefined, [1, 'asc']);
 
     /* Customer profile expenses table */
     initDataTable('.table-expenses-single-client',
@@ -166,7 +173,9 @@ $(function() {
         'undefined', [6, 'desc']);
 
     /* Custome profile projects table */
-    initDataTable('.table-projects-single-client', admin_url + 'projects/table/' + customer_id, undefined, undefined, 'undefined', <?php echo hooks()->apply_filters('projects_table_default_order', json_encode(array(5,'asc'))); ?>);
+    initDataTable('.table-projects-single-client', admin_url + 'projects/table/' + customer_id, undefined,
+        undefined, 'undefined',
+        <?php echo hooks()->apply_filters('projects_table_default_order', json_encode([5, 'asc'])); ?>);
 
     var vRules = {};
     if (app.options.company_is_required == 1) {
@@ -177,28 +186,31 @@ $(function() {
 
     appValidateForm($('.client-form'), vRules);
 
-    if(typeof(customer_id) == 'undefined'){
+    if (typeof(customer_id) == 'undefined') {
         $('#company').on('blur', function() {
             var company = $(this).val();
             var $companyExistsDiv = $('#company_exists_info');
 
-            if(company == '') {
+            if (company == '') {
                 $companyExistsDiv.addClass('hide');
                 return;
             }
 
-            $.post(admin_url+'clients/check_duplicate_customer_name', {company:company})
-            .done(function(response) {
-                if(response) {
-                    response = JSON.parse(response);
-                    if(response.exists == true) {
-                        $companyExistsDiv.removeClass('hide');
-                        $companyExistsDiv.html('<div class="info-block mbot15">'+response.message+'</div>');
-                    } else {
-                        $companyExistsDiv.addClass('hide');
+            $.post(admin_url + 'clients/check_duplicate_customer_name', {
+                    company: company
+                })
+                .done(function(response) {
+                    if (response) {
+                        response = JSON.parse(response);
+                        if (response.exists == true) {
+                            $companyExistsDiv.removeClass('hide');
+                            $companyExistsDiv.html('<div class="alert alert-info">' + response
+                                .message + '</div>');
+                        } else {
+                            $companyExistsDiv.addClass('hide');
+                        }
                     }
-                }
-            });
+                });
         });
     }
 
@@ -208,7 +220,8 @@ $(function() {
         $('input[name="billing_city"]').val($('input[name="city"]').val());
         $('input[name="billing_state"]').val($('input[name="state"]').val());
         $('input[name="billing_zip"]').val($('input[name="zip"]').val());
-        $('select[name="billing_country"]').selectpicker('val', $('select[name="country"]').selectpicker('val'));
+        $('select[name="billing_country"]').selectpicker('val', $('select[name="country"]')
+            .selectpicker('val'));
     });
 
     $('.customer-copy-billing-address').on('click', function(e) {
@@ -217,7 +230,8 @@ $(function() {
         $('input[name="shipping_city"]').val($('input[name="billing_city"]').val());
         $('input[name="shipping_state"]').val($('input[name="billing_state"]').val());
         $('input[name="shipping_zip"]').val($('input[name="billing_zip"]').val());
-        $('select[name="shipping_country"]').selectpicker('val', $('select[name="billing_country"]').selectpicker('val'));
+        $('select[name="shipping_country"]').selectpicker('val', $('select[name="billing_country"]')
+            .selectpicker('val'));
     });
 
     $('body').on('hidden.bs.modal', '#contact', function() {
@@ -231,10 +245,11 @@ $(function() {
 });
 
 function delete_contact_profile_image(contact_id) {
-    requestGet('clients/delete_contact_profile_image/'+contact_id).done(function(){
+    requestGet('clients/delete_contact_profile_image/' + contact_id).done(function() {
         $('body').find('#contact-profile-image').removeClass('hide');
         $('body').find('#contact-remove-img').addClass('hide');
-        $('body').find('#contact-img').attr('src', '<?php echo base_url('assets/images/user-placeholder.jpg'); ?>');
+        $('body').find('#contact-img').attr('src',
+            '<?php echo base_url('assets/images/user-placeholder.jpg'); ?>');
     });
 }
 
@@ -262,19 +277,20 @@ function validate_contact_form() {
 
                     var $sentSetPassword = $('input[name="send_set_password_email"]');
 
-                    if ($('#contact input[name="contactid"]').val() == '' && $sentSetPassword.prop('checked') == false) {
+                    if ($('#contact input[name="contactid"]').val() == '' && $sentSetPassword.prop(
+                            'checked') == false) {
                         return true;
                     }
                 }
             }
         },
         email: {
-            <?php if(hooks()->apply_filters('contact_email_required', "true") === "true"){ ?>
+            <?php if (hooks()->apply_filters('contact_email_required', 'true') === 'true') { ?>
             required: true,
             <?php } ?>
             email: true,
             // Use this hook only if the contacts are not logging into the customers area and you are not using support tickets piping.
-            <?php if(hooks()->apply_filters('contact_email_unique', "true") === "true"){ ?>
+            <?php if (hooks()->apply_filters('contact_email_unique', 'true') === 'true') { ?>
             remote: {
                 url: admin_url + "misc/contact_email_exists",
                 type: 'post',
@@ -296,7 +312,7 @@ function contactFormHandler(form) {
     $('#contact input[name="is_primary"]').prop('disabled', false);
 
     $("#contact input[type=file]").each(function() {
-        if($(this).val() === "") {
+        if ($(this).val() === "") {
             $(this).prop('disabled', true);
         }
     });
@@ -312,34 +328,35 @@ function contactFormHandler(form) {
         cache: false,
         processData: false,
         url: formURL
-    }).done(function(response){
-           response = JSON.parse(response);
-            if (response.success) {
-                alert_float('success', response.message);
-                if(typeof(response.is_individual) != 'undefined' && response.is_individual) {
-                    $('.new-contact').addClass('disabled');
-                    if(!$('.new-contact-wrapper')[0].hasAttribute('data-toggle')) {
-                        $('.new-contact-wrapper').attr('data-toggle','tooltip');
-                    }
+    }).done(function(response) {
+        response = JSON.parse(response);
+        if (response.success) {
+            alert_float('success', response.message);
+            if (typeof(response.is_individual) != 'undefined' && response.is_individual) {
+                $('.new-contact').addClass('disabled');
+                if (!$('.new-contact-wrapper')[0].hasAttribute('data-toggle')) {
+                    $('.new-contact-wrapper').attr('data-toggle', 'tooltip');
                 }
             }
+        }
 
-            if ($.fn.DataTable.isDataTable('.table-contacts')) {
-                $('.table-contacts').DataTable().ajax.reload(null,false);
-            } else if ($.fn.DataTable.isDataTable('.table-all-contacts')) {
-                $('.table-all-contacts').DataTable().ajax.reload(null,false);
-            }
+        if ($.fn.DataTable.isDataTable('.table-contacts')) {
+            $('.table-contacts').DataTable().ajax.reload(null, false);
+        } else if ($.fn.DataTable.isDataTable('.table-all-contacts')) {
+            $('.table-all-contacts').DataTable().ajax.reload(null, false);
+        }
 
-            if (response.proposal_warning && response.proposal_warning != false) {
-                $('body').find('#contact_proposal_warning').removeClass('hide');
-                $('body').find('#contact_update_proposals_emails').attr('data-original-email', response.original_email);
-                $('#contact').animate({
-                    scrollTop: 0
-                }, 800);
-            } else {
-                $('#contact').modal('hide');
-            }
-    }).fail(function(error){
+        if (response.proposal_warning && response.proposal_warning != false) {
+            $('body').find('#contact_proposal_warning').removeClass('hide');
+            $('body').find('#contact_update_proposals_emails').attr('data-original-email', response
+                .original_email);
+            $('#contact').animate({
+                scrollTop: 0
+            }, 800);
+        } else {
+            $('#contact').modal('hide');
+        }
+    }).fail(function(error) {
         alert_float('danger', JSON.parse(error.responseText));
     });
     return false;
@@ -355,7 +372,7 @@ function contact(client_id, contact_id) {
             show: true,
             backdrop: 'static'
         });
-        $('body').off('shown.bs.modal','#contact');
+        $('body').off('shown.bs.modal', '#contact');
         $('body').on('shown.bs.modal', '#contact', function() {
             if (contact_id == '') {
                 $('#contact').find('input[name="firstname"]').focus();
@@ -376,7 +393,8 @@ function update_all_proposal_emails_linked_to_contact(contact_id) {
     var data = {};
     data.update = true;
     data.original_email = $('body').find('#contact_update_proposals_emails').data('original-email');
-    $.post(admin_url + 'clients/update_all_proposal_emails_linked_to_customer/' + contact_id, data).done(function(response) {
+    $.post(admin_url + 'clients/update_all_proposal_emails_linked_to_customer/' + contact_id, data).done(function(
+        response) {
         response = JSON.parse(response);
         if (response.success) {
             alert_float('success', response.message);
@@ -413,13 +431,13 @@ function save_longitude_and_latitude(clientid) {
     var data = {};
     data.latitude = $('#latitude').val();
     data.longitude = $('#longitude').val();
-    $.post(admin_url + 'clients/save_longitude_and_latitude/'+clientid, data).done(function(response) {
-       if(response == 'success') {
+    $.post(admin_url + 'clients/save_longitude_and_latitude/' + clientid, data).done(function(response) {
+        if (response == 'success') {
             alert_float('success', "<?php echo _l('updated_successfully', _l('client')); ?>");
-       }
-        setTimeout(function(){
+        }
+        setTimeout(function() {
             window.location.reload();
-        },1200);
+        }, 1200);
     }).fail(function(error) {
         alert_float('danger', error.responseText);
     });

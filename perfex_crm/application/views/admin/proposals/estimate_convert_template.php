@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="modal fade proposal-convert-modal" id="convert_to_estimate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-xxl" role="document">
-        <?php echo form_open('admin/proposals/convert_to_estimate/'.$proposal->id,array('id'=>'proposal_convert_to_estimate_form','class'=>'_transaction_form disable-on-submit')); ?>
+        <?php echo form_open('admin/proposals/convert_to_estimate/' . $proposal->id, ['id' => 'proposal_convert_to_estimate_form', 'class' => '_transaction_form disable-on-submit']); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" onclick="close_modal_manually('#convert_to_estimate')" aria-label="Close">
@@ -22,7 +22,7 @@
                 <button type="button" class="btn btn-default" onclick="close_modal_manually('#convert_to_estimate')">
                     <?php echo _l('close'); ?>
                 </button>
-                <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
             </div>
         </div>
         <?php echo form_close(); ?>
@@ -39,13 +39,13 @@
     init_items_sortable();
     init_tags_inputs();
     validate_estimate_form('#proposal_convert_to_estimate_form');
-    <?php if($proposal->assigned != 0){ ?>
+    <?php if ($proposal->assigned != 0) { ?>
     $('#convert_to_estimate #sale_agent').selectpicker('val',<?php echo $proposal->assigned; ?>);
     <?php } ?>
     $('select[name="discount_type"]').selectpicker('val','<?php echo $proposal->discount_type; ?>');
     $('input[name="discount_percent"]').val('<?php echo $proposal->discount_percent; ?>');
     $('input[name="discount_total"]').val('<?php echo $proposal->discount_total; ?>');
-    <?php if(is_sale_discount($proposal,'fixed')) { ?>
+    <?php if (is_sale_discount($proposal, 'fixed')) { ?>
         $('.discount-total-type.discount-type-fixed').click();
     <?php } ?>
     $('input[name="adjustment"]').val('<?php echo $proposal->adjustment; ?>');

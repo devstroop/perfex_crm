@@ -22,21 +22,23 @@ function init_admin_auth_assets()
 {
     $CI        = &get_instance();
     $groupName = 'admin-auth';
+
     add_favicon_link_asset($groupName);
-    $CI->app_css->add('reset-css', 'assets/css/reset.min.css', $groupName);
+
+    $CI->app_css->add('reset-css', 'assets/css/reset.min.css', $groupName, ['inter-font']);
+    $CI->app_css->add('inter-font', 'https://rsms.me/inter/inter.css', $groupName);
     $CI->app_css->add('bootstrap-css', 'assets/plugins/bootstrap/css/bootstrap.min.css', $groupName);
+
     if (is_rtl()) {
         $CI->app_css->add('bootstrap-rtl-css', 'assets/plugins/bootstrap-arabic/css/bootstrap-arabic.min.css', $groupName);
     }
-    $CI->app_css->add('roboto-css', 'assets/plugins/roboto/roboto.css', $groupName);
-    $CI->app_css->add('bootstrap-overrides', 'assets/css/bs-overides.min.css', $groupName);
+
+    $CI->app_css->add('tailwind-css', base_url($CI->app_css->core_file('assets/builds', 'tailwind.css')) . '?v=' . $CI->app_css->core_version(), $groupName, ['bootstrap-css']);
 }
 
 function _init_admin_assets()
 {
-    $CI          = &get_instance();
-    $locale      = $GLOBALS['locale'];
-    $localeUpper = strtoupper($locale);
+    $CI = &get_instance();
 
     // Javascript
     $CI->app_scripts->add('vendor-js', 'assets/builds/vendor-admin.js');
@@ -71,14 +73,21 @@ function _init_admin_assets()
     add_favicon_link_asset();
 
     $CI->app_css->add('reset-css', 'assets/css/reset.min.css');
-    $CI->app_css->add('roboto-css', 'assets/plugins/roboto/roboto.css', 'admin', ['reset-css']);
+    $CI->app_css->add('inter-font', 'https://rsms.me/inter/inter.css', 'admin', ['reset-css']);
     $CI->app_css->add('vendor-css', 'assets/builds/vendor-admin.css', 'admin', ['reset-css']);
+
+    $CI->app_css->add('fontawesome-css', 'assets/plugins/font-awesome/css/fontawesome.min.css');
+    $CI->app_css->add('fontawesome-brands', 'assets/plugins/font-awesome/css/brands.min.css');
+    $CI->app_css->add('fontawesome-solid', 'assets/plugins/font-awesome/css/solid.min.css');
+    $CI->app_css->add('fontawesome-regular', 'assets/plugins/font-awesome/css/regular.min.css');
 
     if (is_rtl()) {
         $CI->app_css->add('bootstrap-rtl-css', 'assets/plugins/bootstrap-arabic/css/bootstrap-arabic.min.css');
     }
 
-    $CI->app_css->add('app-css', base_url($CI->app_css->core_file('assets/css', 'style.css')) . '?v=' . $CI->app_css->core_version());
+    $CI->app_css->add('tailwind-css', base_url($CI->app_css->core_file('assets/builds', 'tailwind.css')) . '?v=' . $CI->app_css->core_version());
+
+    $CI->app_css->add('app-css', base_url($CI->app_css->core_file('assets/css', 'style.css')) . '?v=' . $CI->app_css->core_version(), 'admin', ['tailwind-css']);
 
     if (file_exists(FCPATH . 'assets/css/custom.css')) {
         $CI->app_css->add('custom-css', base_url('assets/css/custom.css'), 'admin', ['app-css']);

@@ -160,7 +160,7 @@ foreach ($rResult as $aRow) {
     $row[] = ($aRow['phonenumber'] != '' ? '<a href="tel:' . $aRow['phonenumber'] . '">' . $aRow['phonenumber'] . '</a>' : '');
 
     $base_currency = get_base_currency();
-    $row[] = ($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'],$base_currency->symbol) : '');
+    $row[]         = ($aRow['lead_value'] != 0 ? app_format_money($aRow['lead_value'], $base_currency->id) : '');
 
     $row[] .= render_tags($aRow['tags']);
 
@@ -180,16 +180,17 @@ foreach ($rResult as $aRow) {
 
     if ($aRow['status_name'] == null) {
         if ($aRow['lost'] == 1) {
-            $outputStatus = '<span class="label label-danger inline-block">' . _l('lead_lost') . '</span>';
+            $outputStatus = '<span class="label label-danger">' . _l('lead_lost') . '</span>';
         } elseif ($aRow['junk'] == 1) {
-            $outputStatus = '<span class="label label-warning inline-block">' . _l('lead_junk') . '</span>';
+            $outputStatus = '<span class="label label-warning">' . _l('lead_junk') . '</span>';
         }
     } else {
-        $outputStatus = '<span class="inline-block lead-status-'.$aRow['status'].' label label-' . (empty($aRow['color']) ? 'default': '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . $aRow['color'] . '">' . $aRow['status_name'];
+        $outputStatus = '<span class="lead-status-' . $aRow['status'] . ' label' . (empty($aRow['color']) ? ' label-default': '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'];
+
         if (!$locked) {
             $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
             $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableLeadsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-            $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa fa-caret-down" aria-hidden="true"></i></span>';
+            $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa-solid fa-chevron-down tw-opacity-70"></i></span>';
             $outputStatus .= '</a>';
 
             $outputStatus .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableLeadsStatus-' . $aRow['id'] . '">';
@@ -224,7 +225,7 @@ foreach ($rResult as $aRow) {
     $row['DT_RowId'] = 'lead_' . $aRow['id'];
 
     if ($aRow['assigned'] == get_staff_user_id()) {
-        $row['DT_RowClass'] = 'alert-info';
+        $row['DT_RowClass'] = 'info';
     }
 
     if (isset($row['DT_RowClass'])) {

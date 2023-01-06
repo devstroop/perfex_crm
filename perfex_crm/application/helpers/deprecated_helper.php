@@ -1242,7 +1242,8 @@ function _check_deprecated_calendar_view_name_option($value, $name)
     if ($name === 'default_view_calendar' &&
             is_client_logged_in() &&
             get_option('_v283_update_clients_theme') !== 'perfex' &&
-            active_clients_theme() !== 'perfex') {
+            active_clients_theme() !== 'perfex' &&
+            !in_array($value, ['dayGridMonth','dayGridWeek','dayGridDay','timeGridWeek','timeGridDay'])) {
         $CalendarV5toV3ViewNamesMap = [
             'dayGridMonth' => 'month',
             'dayGridWeek'  => 'basicWeek',

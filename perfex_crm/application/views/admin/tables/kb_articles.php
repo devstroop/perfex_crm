@@ -57,11 +57,10 @@ foreach ($rResult as $aRow) {
                 $link = site_url('knowledge-base/article/' . $aRow['slug']);
             }
 
-            $_data = '<b>' . $_data . '</b>';
             if (has_permission('knowledge_base', '', 'edit')) {
-                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '" class="font-size-14">' . $_data . '</a>';
+                $_data = '<a href="' . admin_url('knowledge_base/article/' . $aRow['articleid']) . '">' . $_data . '</a>';
             } else {
-                $_data = '<a href="' . $link . '" target="_blank" class="font-size-14">' . $_data . '</a>';
+                $_data = '<a href="' . $link . '" target="_blank">' . $_data . '</a>';
             }
 
             if ($aRow['staff_article'] == 1) {

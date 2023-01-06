@@ -18,16 +18,16 @@
                     <?php if (staff_can('edit', 'expenses')) { ?>
                         <?php
                         echo render_input('expenses_bulk_amount', 'expense_add_edit_amount', '', 'number');
-                        echo render_select('expenses_bulk_category', $categories, array('id', 'name'), 'expense_category');
+                        echo render_select('expenses_bulk_category', $categories, ['id', 'name'], 'expense_category');
                         echo render_date_input('expenses_bulk_date', 'expense_add_edit_date');
-                        echo render_select('expenses_bulk_paymentmode', $payment_modes, array('id', 'name'), 'payment_mode');
+                        echo render_select('expenses_bulk_paymentmode', $payment_modes, ['id', 'name'], 'payment_mode');
                         ?>
                     <?php } ?>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <a href="#" class="btn btn-info" onclick="expenses_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
+                <a href="#" class="btn btn-primary" onclick="expenses_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
             </div>
         </div>
         <!-- /.modal-content -->

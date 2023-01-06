@@ -3,10 +3,10 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 $has_permission_view_own = has_permission('estimate_request', '', 'view_own');
-$has_permission_view = has_permission('estimate_request', '', 'view');
-$has_permission_edit = has_permission('estimate_request', '', 'edit');
-$has_permission_delete = has_permission('estimate_request', '', 'delete');
-$statuses              = $this->ci->estimate_request_model->get_status();
+$has_permission_view     = has_permission('estimate_request', '', 'view');
+$has_permission_edit     = has_permission('estimate_request', '', 'edit');
+$has_permission_delete   = has_permission('estimate_request', '', 'delete');
+$statuses                = $this->ci->estimate_request_model->get_status();
 
 $aColumns = [
     db_prefix() . 'estimate_requests.id as id',
@@ -97,12 +97,12 @@ foreach ($rResult as $aRow) {
     }
 
     $row[] = $assignedOutput;
-    if ($has_permission_edit) {
-        $outputStatus = '<span class="inline-block estimate_request-status-' . $aRow['status'] . ' label label-' . (empty($aRow['color']) ? 'default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . $aRow['color'] . '">' . $aRow['status_name'];
+    if (!$has_permission_edit) {
+        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'];
 
         $outputStatus .= '<div class="dropdown inline-block mleft5 table-export-exclude">';
         $outputStatus .= '<a href="#" style="font-size:14px;vertical-align:middle;" class="dropdown-toggle text-dark" id="tableestimate_requestsStatus-' . $aRow['id'] . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-        $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa fa-caret-down" aria-hidden="true"></i></span>';
+        $outputStatus .= '<span data-toggle="tooltip" title="' . _l('ticket_single_change_status') . '"><i class="fa-solid fa-chevron-down"></i></span>';
         $outputStatus .= '</a>';
 
         $outputStatus .= '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="tableestimate_requestsStatus-' . $aRow['id'] . '">';
@@ -111,7 +111,7 @@ foreach ($rResult as $aRow) {
                 $outputStatus .= '<li>
                     <a href="#" onclick="mark_estimate_request_as(' . $_status['id'] . ',' . $aRow['id'] . '); return false;">
                         ' . $_status['name'] . '
-                    </a>  
+                    </a>
                 </li>';
             }
         }
@@ -119,7 +119,7 @@ foreach ($rResult as $aRow) {
         $outputStatus .= '</div>';
         $outputStatus .= '</span>';
     } else {
-        $outputStatus = '<span class="inline-block estimate_request-status-' . $aRow['status'] . ' label label-' . (empty($aRow['color']) ? 'default' : '') . '" style="color:' . $aRow['color'] . ';border:1px solid ' . $aRow['color'] . '">' . $aRow['status_name'] . '</span>';
+        $outputStatus = '<span class="label estimate_request-status-' . $aRow['status'] . '" style="color:' . $aRow['color'] . ';border:1px solid ' . adjust_hex_brightness($aRow['color'], 0.4) . ';background: ' . adjust_hex_brightness($aRow['color'], 0.04) . ';">' . $aRow['status_name'] . '</span>';
     }
     $row[] = $outputStatus;
 
@@ -129,7 +129,7 @@ foreach ($rResult as $aRow) {
     $row['DT_RowId'] = 'lead_' . $aRow['id'];
 
     if ($aRow['assigned'] == get_staff_user_id()) {
-        $row['DT_RowClass'] = 'alert-info';
+        $row['DT_RowClass'] = 'info';
     }
 
     if (isset($row['DT_RowClass'])) {

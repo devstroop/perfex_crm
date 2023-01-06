@@ -90,7 +90,7 @@ class Expenses extends AdminController
             die;
         }
         if ($id == '') {
-            $title = _l('add_new', _l('expense_lowercase'));
+            $title = _l('add_new', _l('expense'));
         } else {
             $data['expense'] = $this->expenses_model->get($id);
 
@@ -98,7 +98,7 @@ class Expenses extends AdminController
                 blank_page(_l('expense_not_found'));
             }
 
-            $title = _l('edit', _l('expense_lowercase'));
+            $title = _l('edit', _l('expense'));
         }
 
         if ($this->input->get('customer_id')) {
@@ -119,7 +119,6 @@ class Expenses extends AdminController
         $data['title']      = $title;
         $this->load->view('admin/expenses/expense', $data);
     }
-
 
     public function import()
     {

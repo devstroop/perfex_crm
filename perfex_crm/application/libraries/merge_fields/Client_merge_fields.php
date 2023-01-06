@@ -388,6 +388,20 @@ class Client_merge_fields extends App_merge_fields
                         'new-customer-profile-file-uploaded-to-staff',
                     ],
                 ],
+                [
+                    'name'      => 'Client Website',
+                    'key'       => '{client_website}',
+                    'available' => [
+                        'client',
+                        'invoice',
+                        'estimate',
+                        'ticket',
+                        'contract',
+                        'project',
+                        'credit_note',
+                        'subscriptions',
+                    ],
+                ],
             ];
     }
 
@@ -418,6 +432,7 @@ class Client_merge_fields extends App_merge_fields
         $fields['{client_zip}']                        = '';
         $fields['{client_state}']                      = '';
         $fields['{client_address}']                    = '';
+        $fields['{client_website}']                    = '';
         $fields['{password}']                          = '';
         $fields['{client_vat_number}']                 = '';
         $fields['{contact_public_consent_url}']        = '';
@@ -460,6 +475,7 @@ class Client_merge_fields extends App_merge_fields
         $fields['{client_zip}']                        = $client->zip;
         $fields['{client_state}']                      = $client->state;
         $fields['{client_address}']                    = $client->address;
+        $fields['{client_website}']                    = $client->website;
         $fields['{client_id}']                         = $client_id;
 
         if ($password != '') {

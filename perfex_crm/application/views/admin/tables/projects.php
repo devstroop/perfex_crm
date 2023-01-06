@@ -90,7 +90,7 @@ foreach ($rResult as $aRow) {
     $name .= '<a href="' . $link . '">' . _l('view') . '</a>';
 
     if ($hasPermissionCreate && !$clientid) {
-        $name .= ' | <a href="#" data-name="'. htmlspecialchars($aRow['name'] , ENT_QUOTES).'" onclick="copy_project(' . $aRow['id'] . ', this);return false;">' . _l('copy_project') . '</a>';
+        $name .= ' | <a href="#" data-name="' . htmlspecialchars($aRow['name'], ENT_QUOTES) . '" onclick="copy_project(' . $aRow['id'] . ', this);return false;">' . _l('copy_project') . '</a>';
     }
 
     if ($hasPermissionEdit) {
@@ -137,7 +137,7 @@ foreach ($rResult as $aRow) {
     $row[] = $membersOutput;
 
     $status = get_project_status_by_id($aRow['status']);
-    $row[]  = '<span class="label label inline-block project-status-' . $aRow['status'] . '" style="color:' . $status['color'] . ';border:1px solid ' . $status['color'] . '">' . $status['name'] . '</span>';
+    $row[]  = '<span class="label project-status-' . $aRow['status'] . '" style="color:' . $status['color'] . ';border:1px solid ' . adjust_hex_brightness($status['color'], 0.4) . ';background: ' . adjust_hex_brightness($status['color'], 0.04) . ';">' . $status['name'] . '</span>';
 
     // Custom fields add values
     foreach ($customFieldsColumns as $customFieldColumn) {

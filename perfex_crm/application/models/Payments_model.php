@@ -338,7 +338,7 @@ class Payments_model extends App_Model
                         'fromcompany'     => true,
                         'touserid'        => $member['staffid'],
                         'description'     => 'not_invoice_payment_recorded',
-                        'link'            => 'invoices/list_invoices/' . $invoice->id,
+                        'link'            => 'payments/payment/' . $insert_id,
                         'additional_data' => serialize([
                             format_invoice_number($invoice->id),
                         ]),
@@ -432,6 +432,11 @@ class Payments_model extends App_Model
             ]));
             log_activity('Payment Deleted [ID:' . $id . ', Invoice Number: ' . format_invoice_number($current->id) . ']');
 
+            hooks()->do_action('after_payment_deleted', [
+                'paymentid' => $id,
+                'invoiceid' => $invoiceid,
+            ]);
+
             return true;
         }
 
@@ -514,7 +519,7 @@ class Payments_model extends App_Model
             $contacts = $this->get_contacts_for_payment_emails($clientId);
             foreach ($contacts as $contact) {
                 if (count($payments) === 1) {
-                    $this->send_invoice_payment_recorded($payments[0], $contact);
+                    $this->send_invoice_payment_recorded($payments[0]->id, $contact);
                 } else {
                     $template = mail_template('invoice_batch_payments', $payments, $contact);
                     foreach ($payments as $payment) {
@@ -528,16 +533,16 @@ class Payments_model extends App_Model
         }
     }
 
-    public function send_invoice_payment_recorded($payment, $contact)
+    public function send_invoice_payment_recorded($id, $contact)
     {
         if (!class_exists('Invoices_model', false)) {
             $this->load->model('invoices_model');
         }
 
         // to get structure matching payment_pdf()
-        $payment               = $this->get($payment->id);
+        $payment               = $this->get($id);
         $payment->invoice_data = $this->invoices_model->get($payment->invoiceid);
-        $template              = mail_template('invoice_payment_recorded_to_customer', (array) $contact, $payment->invoice_data, false, $payment->id);
+        $template              = mail_template('invoice_payment_recorded_to_customer', (array) $contact, $payment->invoice_data, false, $id);
         $template              = $this->_add_payment_mail_attachments_to_template($template, $payment);
 
         return $template->send();

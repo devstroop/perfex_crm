@@ -43,7 +43,7 @@
 </div>
 <p class="bold" id="signatureLabel"><?php echo _l('signature'); ?></p>
 <div class="signature-pad--body">
-  <canvas id="signature" height="130" width="550" style="display:block;margin:0 auto;"></canvas>
+  <canvas id="signature" height="130" width="550"></canvas>
 </div>
 <input type="text" style="width:1px; height:1px; border:0px;" tabindex="-1" name="signature" id="signatureInput">
 <div class="dispay-block">
@@ -69,28 +69,27 @@
 </div>
 <!-- /.modal -->
 <?php
-$this->app_scripts->theme('signature-pad','assets/plugins/signature-pad/signature_pad.min.js');
+  $this->app_scripts->theme('signature-pad','assets/plugins/signature-pad/signature_pad.min.js');
 ?>
 <script>
   $(function(){
-    function removeSignatureBlanks(canvas) {
-        // First duplicate the canvas to not alter the original
-        var croppedCanvas = document.createElement('canvas'),
-        croppedCtx = croppedCanvas.getContext('2d');
+   SignaturePad.prototype.toDataURLAndRemoveBlanks = function() {
+     var canvas = this._ctx.canvas;
+       // First duplicate the canvas to not alter the original
+       var croppedCanvas = document.createElement('canvas'),
+       croppedCtx = croppedCanvas.getContext('2d');
 
-        croppedCanvas.width = canvas.width;
-        croppedCanvas.height = canvas.height;
-        croppedCtx.drawImage(canvas, 0, 0);
+       croppedCanvas.width = canvas.width;
+       croppedCanvas.height = canvas.height;
+       croppedCtx.drawImage(canvas, 0, 0);
 
        // Next do the actual cropping
        var w = croppedCanvas.width,
        h = croppedCanvas.height,
-
        pix = {
          x: [],
          y: []
        },
-
        imageData = croppedCtx.getImageData(0, 0, croppedCanvas.width, croppedCanvas.height),
        x, y, index;
 
@@ -100,53 +99,29 @@ $this->app_scripts->theme('signature-pad','assets/plugins/signature-pad/signatur
            if (imageData.data[index + 3] > 0) {
              pix.x.push(x);
              pix.y.push(y);
+
            }
          }
        }
-
        pix.x.sort(function(a, b) {
          return a - b
        });
-
        pix.y.sort(function(a, b) {
          return a - b
        });
-
        var n = pix.x.length - 1;
 
        w = pix.x[n] - pix.x[0];
        h = pix.y[n] - pix.y[0];
+       var cut = croppedCtx.getImageData(pix.x[0], pix.y[0], w, h);
 
-       var cut = croppedCtx.getImageData(pix.x[0], pix.y[0], w, h + 5);
-
-       croppedCanvas.width = w + 2;
-       croppedCanvas.height = h + 2;
+       croppedCanvas.width = w;
+       croppedCanvas.height = h;
        croppedCtx.putImageData(cut, 0, 0);
 
-       return [croppedCanvas,cut]
-     }
-
-     SignaturePad.prototype.toDataURLAndRemoveBlanks = function() {
-       var canvas = this._ctx.canvas;
-       var results = removeSignatureBlanks(canvas)
-       var croppedCanvas = results[0];
-       var cut = results[1];
-
-       var newCanvas = $("<canvas>")
-       .attr("width", '350px')
-       .attr("height", '100px')[0];
-
-       var hRatio = newCanvas.width / cut.width;
-       var vRatio = newCanvas.height / cut.height;
-       var ratio  = Math.min ( hRatio, vRatio );
-       ctx = newCanvas.getContext('2d');
-       ctx.drawImage(croppedCanvas, 0, 0, cut.width, cut.height, 0, 0, cut.width*ratio, cut.height*ratio);
-
-       var results = removeSignatureBlanks(newCanvas)
-       newCanvas = results[0];
-
-       return newCanvas.toDataURL();
+       return croppedCanvas.toDataURL();
      };
+
 
      function signaturePadChanged() {
 
@@ -193,7 +168,7 @@ $this->app_scripts->theme('signature-pad','assets/plugins/signature-pad/signatur
        });
 
      $('#identityConfirmationForm').submit(function() {
-      signaturePadChanged();
-    });
+       signaturePadChanged();
+     });
    });
  </script>

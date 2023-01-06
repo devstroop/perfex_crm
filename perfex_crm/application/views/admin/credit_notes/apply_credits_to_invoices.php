@@ -1,18 +1,18 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<?php if($credit_note->status == 1) { ?>
+<?php if ($credit_note->status == 1) { ?>
 <!-- Modal Apply Credits -->
 <div class="modal fade apply-credits-to-invoice" id="apply_credits" data-credits-remaining="<?php echo $credit_note->remaining_credits; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabelApplyCredits">
   <div class="modal-dialog modal-lg" role="document">
-    <?php echo form_open(admin_url('credit_notes/apply_credits_to_invoices/'.$credit_note->id),array('id'=>'apply_credits_form')); ?>
+    <?php echo form_open(admin_url('credit_notes/apply_credits_to_invoices/' . $credit_note->id), ['id' => 'apply_credits_form']); ?>
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="modalLabelApplyCredits">
-            <?php echo _l('apply_credits_from',format_credit_note_number($credit_note->id)); ?>
+            <?php echo _l('apply_credits_from', format_credit_note_number($credit_note->id)); ?>
         </h4>
     </div>
     <div class="modal-body">
-        <?php if(count($available_creditable_invoices) > 0) {?>
+        <?php if (count($available_creditable_invoices) > 0) {?>
         <div class="table-responsive credits-table">
             <table class="table table-bordered no-mtop">
                 <thead>
@@ -25,10 +25,10 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($available_creditable_invoices as $invoice) {
-                    ?>
+                <?php foreach ($available_creditable_invoices as $invoice) {
+    ?>
                 <tr>
-                    <td><a href="<?php echo admin_url('invoices/list_invoices/'.$invoice['id']); ?>" target="_blank"><?php echo format_invoice_number($invoice['id']); ?></a></td>
+                    <td><a href="<?php echo admin_url('invoices/list_invoices/' . $invoice['id']); ?>" target="_blank"><?php echo format_invoice_number($invoice['id']); ?></a></td>
                     <td><?php echo _d($invoice['date']); ?></td>
                     <td><?php echo app_format_money($invoice['total'], $invoice['currency_name']) ?></td>
                     <td><?php echo app_format_money($invoice['total_left_to_pay'], $invoice['currency_name']) ?></td>
@@ -36,7 +36,8 @@
                         <input type="number" name="amount[<?php echo $invoice['id']; ?>]" class="form-control apply-credits-field" value="0">
                     </td>
                 </tr>
-                <?php } ?>
+                <?php
+} ?>
             </tbody>
         </table>
     </div>
@@ -68,8 +69,8 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-    <?php if(count($available_creditable_invoices) > 0) { ?>
-    <button type="submit" class="btn btn-info"><?php echo _l('apply'); ?></button>
+    <?php if (count($available_creditable_invoices) > 0) { ?>
+    <button type="submit" class="btn btn-primary"><?php echo _l('apply'); ?></button>
     <?php } ?>
 </div>
 </div>

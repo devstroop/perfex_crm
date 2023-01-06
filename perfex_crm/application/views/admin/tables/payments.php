@@ -59,10 +59,10 @@ foreach ($rResult as $aRow) {
     $link = admin_url('payments/payment/' . $aRow['id']);
 
 
-    $options = icon_btn('payments/payment/' . $aRow['id'], 'pencil-square-o');
+    $options = icon_btn('payments/payment/' . $aRow['id'], 'fa-regular fa-pen-to-square');
 
     if ($hasPermissionDelete) {
-        $options .= icon_btn('payments/delete/' . $aRow['id'], 'remove', 'btn-danger _delete');
+        $options .= icon_btn('payments/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
     }
 
     $numberOutput = '<a href="' . $link . '">' . $aRow['id'] . '</a>';

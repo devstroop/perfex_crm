@@ -9,7 +9,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 function AdminTicketsTableStructure($name = '', $bulk_action = false)
 {
-    $table = '<table class="table customizable-table dt-table-loading ' . ($name == '' ? 'tickets-table' : $name) . ' table-tickets" id="table-tickets" data-last-order-identifier="tickets" data-default-order="' . get_table_last_order('tickets') . '">';
+    $table = '<table class="table customizable-table number-index-' . ($bulk_action ? '2' : '1') . ' dt-table-loading ' . ($name == '' ? 'tickets-table' : $name) . ' table-tickets" id="table-tickets" data-last-order-identifier="tickets" data-default-order="' . get_table_last_order('tickets') . '">';
     $table .= '<thead>';
     $table .= '<tr>';
 
@@ -227,64 +227,72 @@ function ticket_message_save_as_predefined_reply_javascript()
     if (!is_admin() && get_option('staff_members_save_tickets_predefined_replies') == '0') {
         return false;
     } ?>
-    <div class="modal fade" id="savePredefinedReplyFromMessageModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+<div class="modal fade" id="savePredefinedReplyFromMessageModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><?php echo _l('predefined_replies_dt_name'); ?></h4>
-        </div>
-        <div class="modal-body">
-            <?php echo render_input('name', 'predefined_reply_add_edit_name'); ?>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-            <button type="button" class="btn btn-info" id="saveTicketMessagePredefinedReply"><?php echo _l('submit'); ?></button>
-        </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php echo _l('predefined_replies_dt_name'); ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php echo render_input('name', 'predefined_reply_add_edit_name'); ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
+                <button type="button" class="btn btn-primary"
+                    id="saveTicketMessagePredefinedReply"><?php echo _l('submit'); ?></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
-    $(function(){
-        var editorMessage = tinymce.get('message');
-        if(typeof(editorMessage) != 'undefined') {
-            editorMessage.on('change',function(){
-                if(editorMessage.getContent().trim() != '') {
-                    if($('#savePredefinedReplyFromMessage').length == 0){
-                        $('[app-field-wrapper="message"] [role="menubar"] .mce-container-body:first').append("<a id=\"savePredefinedReplyFromMessage\" data-toggle=\"modal\" data-target=\"#savePredefinedReplyFromMessageModal\" class=\"save_predefined_reply_from_message pointer\" href=\"#\"><?php echo _l('save_message_as_predefined_reply'); ?></a>");
-                    }
-                            // For open is handled on contact select
-                            if($('#single-ticket-form').length > 0) {
-                                var contactIDSelect = $('#contactid');
-                                if(contactIDSelect.data('no-contact') == undefined && contactIDSelect.data('ticket-emails') == '0') {
-                                 show_ticket_no_contact_email_warning($('input[name="userid"]').val(), contactIDSelect.val());
-                             } else {
-                                 clear_ticket_no_contact_email_warning();
-                             }
-                         }
-                     } else {
-                        $('#savePredefinedReplyFromMessage').remove();
+$(function() {
+    var editorMessage = tinymce.get('message');
+    if (typeof(editorMessage) != 'undefined') {
+        editorMessage.on('change', function() {
+            if (editorMessage.getContent().trim() != '') {
+                if ($('#savePredefinedReplyFromMessage').length == 0) {
+                    $('[app-field-wrapper="message"] [role="menubar"] .mce-container-body:first')
+                        .append(
+                            "<a id=\"savePredefinedReplyFromMessage\" data-toggle=\"modal\" data-target=\"#savePredefinedReplyFromMessageModal\" class=\"save_predefined_reply_from_message pointer\" href=\"#\"><?php echo _l('save_message_as_predefined_reply'); ?></a>"
+                        );
+                }
+                // For open is handled on contact select
+                if ($('#single-ticket-form').length > 0) {
+                    var contactIDSelect = $('#contactid');
+                    if (contactIDSelect.data('no-contact') == undefined && contactIDSelect.data(
+                            'ticket-emails') == '0') {
+                        show_ticket_no_contact_email_warning($('input[name="userid"]').val(),
+                            contactIDSelect.val());
+                    } else {
                         clear_ticket_no_contact_email_warning();
                     }
-                });
-        }
-        $('body').on('click','#saveTicketMessagePredefinedReply',function(e){
-            e.preventDefault();
-            var data = {}
-            data.message = editorMessage.getContent();
-            data.name = $('#savePredefinedReplyFromMessageModal #name').val();
-            data.ticket_area = true;
-            $.post(admin_url+'tickets/predefined_reply',data).done(function(response){
-                response = JSON.parse(response);
-                if(response.success == true) {
-                    var predefined_reply_select = $('#insert_predefined_reply');
-                    predefined_reply_select.find('option:first').after('<option value="'+response.id+'">'+data.name+'</option>');
-                    predefined_reply_select.selectpicker('refresh');
                 }
-                $('#savePredefinedReplyFromMessageModal').modal('hide');
-            });
+            } else {
+                $('#savePredefinedReplyFromMessage').remove();
+                clear_ticket_no_contact_email_warning();
+            }
+        });
+    }
+    $('body').on('click', '#saveTicketMessagePredefinedReply', function(e) {
+        e.preventDefault();
+        var data = {}
+        data.message = editorMessage.getContent();
+        data.name = $('#savePredefinedReplyFromMessageModal #name').val();
+        data.ticket_area = true;
+        $.post(admin_url + 'tickets/predefined_reply', data).done(function(response) {
+            response = JSON.parse(response);
+            if (response.success == true) {
+                var predefined_reply_select = $('#insert_predefined_reply');
+                predefined_reply_select.find('option:first').after('<option value="' + response
+                    .id + '">' + data.name + '</option>');
+                predefined_reply_select.selectpicker('refresh');
+            }
+            $('#savePredefinedReplyFromMessageModal').modal('hide');
         });
     });
+});
 </script>
 <?php
 }
@@ -307,34 +315,37 @@ function get_ticket_public_url($ticket)
     return site_url('forms/tickets/' . $key);
 }
 
-function ticket_public_form_customers_footer() {
+function ticket_public_form_customers_footer()
+{
     // Create new listeners for the public_form
     // removes the one from clients.js (if loaded) and using new ones
     ?>
-    <style>
-        .single-ticket-project-area { display: none !important; }
-    </style>
-    <script>
-        $(function(){
-            setTimeout(function() {
-                $('#ticket-reply').appFormValidator();
+<style>
+.single-ticket-project-area {
+    display: none !important;
+}
+</style>
+<script>
+$(function() {
+    setTimeout(function() {
+        $('#ticket-reply').appFormValidator();
 
-                $('.toggle-change-ticket-status').off('click');
-                $('.toggle-change-ticket-status').on('click', function() {
-                    $('.ticket-status,.ticket-status-inline').toggleClass('hide');
-                });
+        $('.toggle-change-ticket-status').off('click');
+        $('.toggle-change-ticket-status').on('click', function() {
+            $('.ticket-status,.ticket-status-inline').toggleClass('hide');
+        });
 
-                $('#ticket_status_single').off('change');
-                $('#ticket_status_single').on('change', function() {
-                    data = {};
-                    data.status_id = $(this).val();
-                    data.ticket_id = $('input[name="ticket_id"]').val();
-                    $.post(site_url + 'clients/change_ticket_status/', data).done(function() {
-                        window.location.reload();
-                    });
-                });
-            }, 2000)
-        })
-    </script>
-    <?php
+        $('#ticket_status_single').off('change');
+        $('#ticket_status_single').on('change', function() {
+            data = {};
+            data.status_id = $(this).val();
+            data.ticket_id = $('input[name="ticket_id"]').val();
+            $.post(site_url + 'clients/change_ticket_status/', data).done(function() {
+                window.location.reload();
+            });
+        });
+    }, 2000)
+})
+</script>
+<?php
 }

@@ -9,14 +9,14 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo form_open_multipart('admin/misc/upload_sales_file',array('id'=>'sales-upload','class'=>'dropzone')); ?>
+                        <?php echo form_open_multipart('admin/misc/upload_sales_file', ['id' => 'sales-upload', 'class' => 'dropzone']); ?>
                         <input type="file" name="file" multiple />
                         <?php echo form_close(); ?>
                         <div class="row mtop15" id="sales_uploaded_files_preview">
                         </div>
                         <div class="text-right">
                         <button class="gpicker" data-on-pick="salesGoogleDriveSave">
-                            <i class="fa fa-google" aria-hidden="true"></i>
+                            <i class="fa-brands fa-google" aria-hidden="true"></i>
                             <?php echo _l('choose_from_google_drive'); ?>
                         </button>
                         <div id="dropbox-chooser-sales"></div>

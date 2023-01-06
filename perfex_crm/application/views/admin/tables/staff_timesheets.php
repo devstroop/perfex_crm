@@ -317,11 +317,11 @@ foreach ($rResult as $aRow) {
         data-content='" . render_textarea('timesheet_note') . '
         <button type="button"
         onclick="timer_action(this, ' . $aRow['task_id'] . ', ' . $aRow['id'] . ', 1);"
-        class="btn btn-info btn-xs">' . _l('save')
+        class="btn btn-primary btn-sm">' . _l('save')
         . "</button>'
         class=\"text-danger\"
         onclick=\"return false;\">
-        <i class=\"fa fa-clock-o\"></i> " . _l('task_stop_timer') . '
+        <i class=\"fa-regular fa-clock\"></i> " . _l('task_stop_timer') . '
         </a>';
     }
 

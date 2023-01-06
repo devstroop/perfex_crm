@@ -138,7 +138,7 @@ class Tickets_model extends App_Model
                                 $data['email'] = $email;
                             }
 
-                            if(count($cc) > 0) {
+                            if (count($cc) > 0) {
                                 $data['cc'] = $cc;
                             }
 
@@ -193,7 +193,7 @@ class Tickets_model extends App_Model
                                         }
                                     }
                                     if (!isset($abuse)) {
-                                        if(count($cc) > 0) {
+                                        if (count($cc) > 0) {
                                             $data['cc'] = $cc;
                                         }
                                         $reply_id = $this->add_reply($data, $tid, null, $attachments);
@@ -248,8 +248,8 @@ class Tickets_model extends App_Model
             'date'     => date('Y-m-d H:i:s'),
             'email_to' => $to,
             'name'     => $name ?: 'Unknown',
-            'email'    => $email,
-            'subject'  => $subject,
+            'email'    => $email ?: 'N/A',
+            'subject'  => $subject ?: 'N/A',
             'message'  => $message,
             'status'   => $mailstatus,
         ]);
@@ -546,16 +546,16 @@ class Tickets_model extends App_Model
                 $this->load->model('staff_model');
 
                 $notifiedUsers = [];
-                $staff = $this->getStaffMembersForTicketNotification($ticket->department, $ticket->assigned);
+                $staff         = $this->getStaffMembersForTicketNotification($ticket->department, $ticket->assigned);
                 foreach ($staff as $staff_key => $member) {
                     send_mail_template('ticket_new_reply_to_staff', $ticket, $member, $_attachments);
                     if (get_option('receive_notification_on_new_ticket_replies') == 1) {
                         $notified = add_notification([
-                            'description' => 'not_new_ticket_reply',
-                            'touserid' => $member['staffid'],
-                            'fromcompany' => 1,
-                            'fromuserid' => 0,
-                            'link' => 'tickets/ticket/' . $id,
+                            'description'     => 'not_new_ticket_reply',
+                            'touserid'        => $member['staffid'],
+                            'fromcompany'     => 1,
+                            'fromuserid'      => 0,
+                            'link'            => 'tickets/ticket/' . $id,
                             'additional_data' => serialize([
                                 $ticket->subject,
                             ]),
@@ -586,11 +586,19 @@ class Tickets_model extends App_Model
                 if ($sendEmail) {
                     send_mail_template('ticket_new_reply_to_customer', $ticket, $email, $_attachments, $cc);
                 }
+            }
 
-                if ($cc) {
-                    $this->db->where('ticketid', $id);
-                    $this->db->update('tickets', ['cc' => is_array($cc) ? implode(',', $cc) : $cc]);
+            if ($cc) {
+                // imported reply
+                if (is_array($cc)) {
+                    if ($ticket->cc) {
+                        $currentCC = explode(',', $ticket->cc);
+                        $cc        = array_unique([$cc, $currentCC]);
+                    }
+                    $cc = implode(',', $cc);
                 }
+                $this->db->where('ticketid', $id);
+                $this->db->update('tickets', ['cc' => $cc]);
             }
             hooks()->do_action('after_ticket_reply_added', [
                 'data'    => $data,
@@ -872,18 +880,18 @@ class Tickets_model extends App_Model
 
             $template = 'ticket_created_to_customer';
             if ($admin == null) {
-                $template = 'ticket_autoresponse';
+                $template      = 'ticket_autoresponse';
                 $notifiedUsers = [];
-                $staffToNotify = $this->getStaffMembersForTicketNotification($data['department'], $data['assigned']);
+                $staffToNotify = $this->getStaffMembersForTicketNotification($data['department'], $data['assigned'] ?? 0);
                 foreach ($staffToNotify as $member) {
                     send_mail_template('ticket_created_to_staff', $ticketid, $data['userid'], $data['contactid'], $member, $_attachments);
                     if (get_option('receive_notification_on_new_ticket') == 1) {
                         $notified = add_notification([
-                            'description' => 'not_new_ticket_created',
-                            'touserid' => $member['staffid'],
-                            'fromcompany' => 1,
-                            'fromuserid' => 0,
-                            'link' => 'tickets/ticket/' . $ticketid,
+                            'description'     => 'not_new_ticket_created',
+                            'touserid'        => $member['staffid'],
+                            'fromcompany'     => 1,
+                            'fromuserid'      => 0,
+                            'link'            => 'tickets/ticket/' . $ticketid,
                             'additional_data' => serialize([
                                 $data['subject'],
                             ]),
@@ -1012,6 +1020,8 @@ class Tickets_model extends App_Model
         }
         if ($affectedRows > 0) {
             log_activity('Ticket Deleted [ID: ' . $ticketid . ']');
+
+            hooks()->do_action('after_ticket_deleted', $ticketid);
 
             return true;
         }
@@ -1620,7 +1630,8 @@ class Tickets_model extends App_Model
      * @param array $tickets id's of tickets to check
      * @return array
      */
-    public function get_already_merged_tickets($tickets) {
+    public function get_already_merged_tickets($tickets)
+    {
         if (count($tickets) === 0) {
             return [];
         }
@@ -1671,6 +1682,7 @@ class Tickets_model extends App_Model
     {
         $this->db->select('ticketid,staff_id_replying');
         $this->db->where('ticketid', $ticketId);
+
         return $this->db->get(db_prefix() . 'tickets')->row();
     }
 
@@ -1697,6 +1709,7 @@ class Tickets_model extends App_Model
                 }
             }
         }
+
         return $staffToNotify;
     }
 }

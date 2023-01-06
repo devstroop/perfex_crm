@@ -331,7 +331,8 @@ class Clients extends ClientsController
         if ($group != 'edit_task') {
             if ($group == 'project_overview') {
                 $percent          = $this->projects_model->calc_progress($id);
-                @$data['percent'] = $percent / 100;
+                @$data['percent'] = $percent / 100; // old
+                $data['progress'] = $percent;
                 $this->load->helper('date');
                 $data['project_total_days']        = round((human_to_unix($data['project']->deadline . ' 00:00') - human_to_unix($data['project']->start_date . ' 00:00')) / 3600 / 24);
                 $data['project_days_left']         = $data['project_total_days'];
@@ -1212,6 +1213,8 @@ class Clients extends ClientsController
         if ($contact->email) {
             $sessionData['customer_email'] = $contact->email;
         }
+
+        $sessionData = hooks()->apply_filters('stripe_update_credit_card_session_data', $sessionData, $contact);
 
         try {
             $session = $this->stripe_core->create_session($sessionData);

@@ -8,20 +8,19 @@ use app\services\messages\AbstractMessage;
 
 class CloudFlare extends AbstractMessage
 {
-	protected $alertClass = 'warning';
+    protected $alertClass = 'warning';
 
-	public function isVisible()
-	{
-		$CI     = &get_instance();
-		$header = $CI->input->get_request_header('Cf-Ray');
+    public function isVisible()
+    {
+        $CI     = &get_instance();
+        $header = $CI->input->get_request_header('Cf-Ray');
 
-		return $header && !empty($header) && get_option('show_cloudflare_notice') == '1' && is_admin();
-	}
+        return $header && !empty($header) && get_option('show_cloudflare_notice') == '1' && is_admin();
+    }
 
-	public function getMessage()
-	{
-		?>
-		<div class="mtop15"></div>
+    public function getMessage()
+    {
+        ?>
 		<h4><strong>Cloudflare usage detected</strong></h4><hr />
 		<ul>
 			<li>When using Cloudflare with the application <strong>you must disable ROCKET LOADER</strong> feature from Cloudflare options in order everything to work properly. <br /><strong><small>NOTE: The script can't check if Rocket Loader is enabled/disabled in your Cloudflare account. If Rocket Loader is already disabled you can ignore this warning.</small></strong></li>
@@ -47,5 +46,5 @@ class CloudFlare extends AbstractMessage
 		</ul>
 		<br /><br /><a href="<?php echo admin_url('misc/dismiss_cloudflare_notice'); ?>" class="alert-link">Got it! Don't show this message again</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo admin_url('misc/dismiss_cloudflare_notice'); ?>" class="alert-link">Rocket loader is already disabled</a>
 		<?php
-	}
+    }
 }

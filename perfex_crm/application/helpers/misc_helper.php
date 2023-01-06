@@ -314,7 +314,7 @@ function get_all_knowledge_base_articles_grouped($only_customers = true, $where 
     $groups = $CI->knowledge_base_model->get_kbg('', 1);
     $i      = 0;
     foreach ($groups as $group) {
-        $CI->db->select('slug,subject,description,' . db_prefix() . 'knowledge_base.active as active_article,articlegroup,articleid,staff_article');
+        $CI->db->select('slug,subject,description,' . db_prefix() . 'knowledge_base.active as active_article,articlegroup,articleid,staff_article,datecreated');
         $CI->db->from(db_prefix() . 'knowledge_base');
         $CI->db->where('articlegroup', $group['groupid']);
         $CI->db->where('active', 1);

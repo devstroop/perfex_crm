@@ -23,7 +23,7 @@ function app_init_admin_sidebar_menu_items()
             'name'     => _l('als_clients'),
             'href'     => admin_url('clients'),
             'position' => 5,
-            'icon'     => 'fa fa-user-o',
+            'icon'     => 'fa-regular fa-user',
             'badge'    => [],
         ]);
     }
@@ -32,7 +32,7 @@ function app_init_admin_sidebar_menu_items()
         'collapse' => true,
         'name'     => _l('als_sales'),
         'position' => 10,
-        'icon'     => 'fa fa-balance-scale',
+        'icon'     => 'fa-solid fa-receipt',
         'badge'    => [],
     ]);
 
@@ -119,7 +119,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('expenses', [
             'name'     => _l('expenses'),
             'href'     => admin_url('expenses'),
-            'icon'     => 'fa fa-file-text-o',
+            'icon'     => 'fa-regular fa-file-lines',
             'position' => 20,
             'badge'    => [],
         ]);
@@ -129,7 +129,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('contracts', [
             'name'     => _l('contracts'),
             'href'     => admin_url('contracts'),
-            'icon'     => 'fa fa-file',
+            'icon'     => 'fa-solid fa-file-contract',
             'position' => 25,
             'badge'    => [],
         ]);
@@ -138,7 +138,7 @@ function app_init_admin_sidebar_menu_items()
     $CI->app_menu->add_sidebar_menu_item('projects', [
         'name'     => _l('projects'),
         'href'     => admin_url('projects'),
-        'icon'     => 'fa fa-bars',
+        'icon'     => 'fa-solid fa-chart-gantt',
         'position' => 30,
         'badge'    => [],
     ]);
@@ -146,7 +146,7 @@ function app_init_admin_sidebar_menu_items()
     $CI->app_menu->add_sidebar_menu_item('tasks', [
         'name'     => _l('als_tasks'),
         'href'     => admin_url('tasks'),
-        'icon'     => 'fa fa-tasks',
+        'icon'     => 'fa-regular fa-circle-check',
         'position' => 35,
         'badge'    => [],
     ]);
@@ -154,10 +154,10 @@ function app_init_admin_sidebar_menu_items()
     if ((!is_staff_member() && get_option('access_tickets_to_none_staff_members') == 1) || is_staff_member()) {
         $enable_badge = get_option('enable_support_menu_badges');
         $CI->app_menu->add_sidebar_menu_item('support', [
-            'collapse' => $enable_badge,
+            'collapse' => $enable_badge ? true : null,
             'name'     => _l('support'),
             'href'     => admin_url('tickets'),
-            'icon'     => 'fa fa-ticket',
+            'icon'     => 'fa-regular fa-life-ring',
             'position' => 40,
             'badge'    => [],
         ]);
@@ -196,7 +196,7 @@ function app_init_admin_sidebar_menu_items()
             'name'     => _l('estimate_request'),
             'href'     => admin_url('estimate_request'),
             'position' => 46,
-            'icon'     => 'fa fa-list-alt',
+            'icon'     => 'fa-regular fa-file',
             'badge'    => [],
         ]);
     }
@@ -205,7 +205,7 @@ function app_init_admin_sidebar_menu_items()
         $CI->app_menu->add_sidebar_menu_item('knowledge-base', [
             'name'     => _l('als_kb'),
             'href'     => admin_url('knowledge_base'),
-            'icon'     => 'fa fa-folder-open-o',
+            'icon'     => 'fa-regular fa-folder-closed',
             'position' => 50,
             'badge'    => [],
         ]);
@@ -278,7 +278,7 @@ function app_init_admin_sidebar_menu_items()
             'collapse' => true,
             'name'     => _l('als_reports'),
             'href'     => admin_url('reports'),
-            'icon'     => 'fa fa-area-chart',
+            'icon'     => 'fa-regular fa-chart-bar',
             'position' => 60,
             'badge'    => [],
         ]);

@@ -109,11 +109,20 @@ class Clients_model extends App_Model
      */
     public function add($data, $withContact = false)
     {
+        $contact_data = [];
+        // From Lead Convert to client
+        if (isset($data['send_set_password_email'])) {
+            $contact_data['send_set_password_email'] = true;
+        }
+
+        if (isset($data['donotsendwelcomeemail'])) {
+            $contact_data['donotsendwelcomeemail'] = true;
+        }
+
         $data = $this->check_zero_columns($data);
 
         $data = hooks()->apply_filters('before_client_added', $data);
 
-        $contact_data = [];
         foreach ($this->contact_columns as $field) {
             if (!isset($data[$field])) {
                 continue;
@@ -1333,7 +1342,7 @@ class Clients_model extends App_Model
     public function change_client_status($id, $status)
     {
         $this->db->where('userid', $id);
-        $this->db->update(db_prefix() . 'clients', [
+        $this->db->update('clients', [
             'active' => $status,
         ]);
 

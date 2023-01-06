@@ -39,35 +39,35 @@ class Tasks_model extends App_Model
         $statuses = hooks()->apply_filters('before_get_task_statuses', [
             [
                 'id'             => static::STATUS_NOT_STARTED,
-                'color'          => '#989898',
+                'color'          => '#64748b',
                 'name'           => _l('task_status_1'),
                 'order'          => 1,
                 'filter_default' => true,
             ],
             [
                 'id'             => static::STATUS_IN_PROGRESS,
-                'color'          => '#03A9F4',
+                'color'          => '#3b82f6',
                 'name'           => _l('task_status_4'),
                 'order'          => 2,
                 'filter_default' => true,
             ],
             [
                 'id'             => static::STATUS_TESTING,
-                'color'          => '#2d2d2d',
+                'color'          => '#0284c7',
                 'name'           => _l('task_status_3'),
                 'order'          => 3,
                 'filter_default' => true,
             ],
             [
                 'id'             => static::STATUS_AWAITING_FEEDBACK,
-                'color'          => '#adca65',
+                'color'          => '#84cc16',
                 'name'           => _l('task_status_2'),
                 'order'          => 4,
                 'filter_default' => true,
             ],
             [
                 'id'             => static::STATUS_COMPLETE,
-                'color'          => '#84c529',
+                'color'          => '#22c55e',
                 'name'           => _l('task_status_5'),
                 'order'          => 100,
                 'filter_default' => false,
@@ -686,14 +686,6 @@ class Tasks_model extends App_Model
             $data['datefinished'] = to_sql_date($data['datefinished'], true);
         }
 
-        if (isset($data['custom_fields'])) {
-            $custom_fields = $data['custom_fields'];
-            if (handle_custom_fields_post($id, $custom_fields)) {
-                $affectedRows++;
-            }
-            unset($data['custom_fields']);
-        }
-
         if ($clientRequest == false) {
             $data['cycles'] = !isset($data['cycles']) ? 0 : $data['cycles'];
 
@@ -765,6 +757,14 @@ class Tasks_model extends App_Model
         }
 
         $data = hooks()->apply_filters('before_update_task', $data, $id);
+
+        if (isset($data['custom_fields'])) {
+            $custom_fields = $data['custom_fields'];
+            if (handle_custom_fields_post($id, $custom_fields)) {
+                $affectedRows++;
+            }
+            unset($data['custom_fields']);
+        }
 
         if (isset($data['tags'])) {
             if (handle_tags_save($data['tags'], $id, 'task')) {

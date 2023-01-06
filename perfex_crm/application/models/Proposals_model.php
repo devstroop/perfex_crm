@@ -790,6 +790,8 @@ class Proposals_model extends App_Model
      */
     public function delete($id)
     {
+        hooks()->do_action('before_proposal_deleted', $id);
+
         $this->clear_signature($id);
         $proposal = $this->get($id);
 
@@ -853,6 +855,8 @@ class Proposals_model extends App_Model
             $this->db->delete(db_prefix() . 'views_tracking');
 
             log_activity('Proposal Deleted [ProposalID:' . $id . ']');
+
+            hooks()->do_action('after_proposal_deleted', $id);
 
             return true;
         }

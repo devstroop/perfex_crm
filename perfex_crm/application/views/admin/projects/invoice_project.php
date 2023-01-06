@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="modal fade invoice-project" id="invoice-project-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-xxl" role="document">
-        <?php echo form_open('admin/projects/invoice_project/'.$project->id,array('id'=>'invoice_project_form','class'=>'_transaction_form invoice-form')); ?>
+        <?php echo form_open('admin/projects/invoice_project/' . $project->id, ['id' => 'invoice_project_form', 'class' => '_transaction_form invoice-form']); ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -20,10 +20,10 @@
                 <button class="btn btn-default invoice-form-submit save-as-draft transaction-submit">
                     <?php echo _l('save_as_draft'); ?>
                 </button>
-                <button class="btn btn-info invoice-form-submit save-and-send transaction-submit">
+                <button class="btn btn-primary invoice-form-submit save-and-send transaction-submit">
                       <?php echo _l('save_and_send'); ?>
                 </button>
-                <button class="btn btn-info invoice-form-submit transaction-submit">
+                <button class="btn btn-primary invoice-form-submit transaction-submit">
                     <?php echo _l('submit'); ?>
                 </button>
             </div>

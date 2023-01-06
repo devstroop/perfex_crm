@@ -31,7 +31,7 @@ if (is_numeric($id)) {
             $row[] = $_data;
         }
         if (has_permission('surveys', '', 'delete')) {
-            $row[] = icon_btn('surveys/delete_mail_list/' . $aRow['emailid'], 'remove', 'btn-danger', [
+            $row[] = icon_btn('surveys/delete_mail_list/' . $aRow['emailid'], 'fa fa-remove', 'btn-danger', [
             'onclick' => 'remove_email_from_mail_list(this,' . $aRow['emailid'] . '); return false;',
             ]);
         } else {

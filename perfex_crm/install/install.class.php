@@ -13,32 +13,19 @@ class Install
 {
     protected $error = '';
 
-    public $passed_steps = [];
+    public $current_step = 1;
 
     public $config_path = '../application/config/app-config.php';
 
     public static $last_step = 4;
 
-    public function __construct()
-    {
-        $this->passed_steps = [
-            1 => false,
-            2 => false,
-            3 => false,
-            4 => false,
-        ];
-    }
-
     public function go()
     {
         $debug = '';
-        $step  = 1;
 
         if (isset($_POST) && !empty($_POST)) {
             if (isset($_POST['step']) && $_POST['step'] == 2) {
-                $step                  = 2;
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
+                $this->current_step = 2;
             } elseif (isset($_POST['step']) && $_POST['step'] == 3) {
                 if ($_POST['hostname'] == '') {
                     $this->error = 'Hostname is required';
@@ -49,12 +36,8 @@ class Install
                 } elseif ($_POST['username'] == '') {
                     $this->error = 'Enter database username';
                 }
-                $step                  = 3;
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
+                $this->current_step = 3;
                 if ($this->error === '') {
-                    $this->passed_steps[3] = true;
-
                     $h = trim($_POST['hostname']);
                     $u = trim($_POST['username']);
                     $p = trim($_POST['password']);
@@ -69,19 +52,14 @@ class Install
                     } else {
                         $debug .= 'Success: A proper connection to MySQL was made! The ' . $d . ' database is great.<br />';
                         $debug .= 'Host information: ' . $link->host_info . '<br />';
-                        $step = 4;
+                        $this->current_step = 4;
                         $link->close();
                     }
                 }
             } elseif (isset($_POST['requirements_success'])) {
-                $step                  = 2;
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
+                $this->current_step = 2;
             } elseif (isset($_POST['permissions_success'])) {
-                $step                  = 3;
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
-                $this->passed_steps[3] = true;
+                $this->current_step = 3;
             } elseif (isset($_POST['step']) && $_POST['step'] == 4) {
                 if ($_POST['admin_email'] == '') {
                     $this->error = 'Enter admin email address';
@@ -94,11 +72,7 @@ class Install
                 } elseif ($_POST['base_url'] == '') {
                     $this->error = 'Please enter base url';
                 }
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
-                $this->passed_steps[3] = true;
-                $this->passed_steps[4] = true;
-                $step                  = 4;
+                $this->current_step = 4;
             }
             if ($this->error === '' && isset($_POST['step']) && $_POST['step'] == 4) {
                 include_once('sqlparser.php');
@@ -161,11 +135,6 @@ class Install
                 $sql = "INSERT INTO tblstaff (`firstname`, `lastname`, `password`, `email`, `datecreated`, `admin`, `active`) VALUES('$firstname', '$lastname', '$password', '$email', '$datecreated', 1, 1)";
                 $link->query($sql);
 
-                $this->passed_steps[1] = true;
-                $this->passed_steps[2] = true;
-                $this->passed_steps[3] = true;
-                $this->passed_steps[4] = true;
-
                 if (!file_exists('../.htaccess') && is_writable('../')) {
                     fopen('../.htaccess', 'w');
                     $fp = fopen('../.htaccess', 'a+');
@@ -174,12 +143,15 @@ class Install
                         fclose($fp);
                     }
                 }
-                $step = 5;
+                $this->current_step = 5;
             } else {
                 $error = $this->error;
             }
         }
-        $passed_steps = $this->passed_steps;
+
+        $current_step = $this->current_step;
+        $steps        = $this->steps();
+
         require_once('html.php');
     }
 
@@ -275,20 +247,53 @@ class Install
         return $base_url;
     }
 
+    public function steps()
+    {
+        $step = $this->current_step;
+
+        return [
+            [
+                'id'     => 1,
+                'name'   => 'Requirements',
+                'status' => $step > 1 ? 'complete' : 'current',
+            ],
+            [
+                'id'     => 2,
+                'name'   => 'Permissions',
+                'status' => $step < 2 ? 'upcoming' : ($step > 2 ? 'complete' : 'current'),
+            ],
+            [
+                'id'     => 3,
+                'name'   => 'Database',
+                'status' => $step < 3 ? 'upcoming' : ($step > 3 ? 'complete' : 'current'),
+            ],
+            [
+                'id'     => 4,
+                'name'   => 'Install',
+                'status' => $step < 4 ? 'upcoming' : ($step > 4 ? 'complete' : 'current'),
+            ],
+            [
+                'id'     => 5,
+                'name'   => 'Finish',
+                'status' => $step === 5 ? 'complete' : 'upcoming',
+            ],
+        ];
+    }
+
     public function get_timezones_list()
     {
         return [
-        'EUROPE'     => DateTimeZone::listIdentifiers(DateTimeZone::EUROPE),
-        'AMERICA'    => DateTimeZone::listIdentifiers(DateTimeZone::AMERICA),
-        'INDIAN'     => DateTimeZone::listIdentifiers(DateTimeZone::INDIAN),
-        'AUSTRALIA'  => DateTimeZone::listIdentifiers(DateTimeZone::AUSTRALIA),
-        'ASIA'       => DateTimeZone::listIdentifiers(DateTimeZone::ASIA),
-        'AFRICA'     => DateTimeZone::listIdentifiers(DateTimeZone::AFRICA),
-        'ANTARCTICA' => DateTimeZone::listIdentifiers(DateTimeZone::ANTARCTICA),
-        'ARCTIC'     => DateTimeZone::listIdentifiers(DateTimeZone::ARCTIC),
-        'ATLANTIC'   => DateTimeZone::listIdentifiers(DateTimeZone::ATLANTIC),
-        'PACIFIC'    => DateTimeZone::listIdentifiers(DateTimeZone::PACIFIC),
-        'UTC'        => DateTimeZone::listIdentifiers(DateTimeZone::UTC),
+            'EUROPE'     => DateTimeZone::listIdentifiers(DateTimeZone::EUROPE),
+            'AMERICA'    => DateTimeZone::listIdentifiers(DateTimeZone::AMERICA),
+            'INDIAN'     => DateTimeZone::listIdentifiers(DateTimeZone::INDIAN),
+            'AUSTRALIA'  => DateTimeZone::listIdentifiers(DateTimeZone::AUSTRALIA),
+            'ASIA'       => DateTimeZone::listIdentifiers(DateTimeZone::ASIA),
+            'AFRICA'     => DateTimeZone::listIdentifiers(DateTimeZone::AFRICA),
+            'ANTARCTICA' => DateTimeZone::listIdentifiers(DateTimeZone::ANTARCTICA),
+            'ARCTIC'     => DateTimeZone::listIdentifiers(DateTimeZone::ARCTIC),
+            'ATLANTIC'   => DateTimeZone::listIdentifiers(DateTimeZone::ATLANTIC),
+            'PACIFIC'    => DateTimeZone::listIdentifiers(DateTimeZone::PACIFIC),
+            'UTC'        => DateTimeZone::listIdentifiers(DateTimeZone::UTC),
         ];
     }
 }

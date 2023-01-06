@@ -43,7 +43,10 @@ class Leads extends AdminController
         $data['sources']  = $this->leads_model->get_source();
         $data['title']    = _l('leads');
         // in case accesed the url leads/index/ directly with id - used in search
-        $data['leadid'] = $id;
+        $data['leadid']   = $id;
+        $data['isKanBan'] = $this->session->has_userdata('leads_kanban_view') &&
+            $this->session->userdata('leads_kanban_view') == 'true';
+
         $this->load->view('admin/leads/manage_leads', $data);
     }
 
@@ -63,7 +66,7 @@ class Leads extends AdminController
 
         $data['statuses']      = $this->leads_model->get_status();
         $data['base_currency'] = get_base_currency();
-        $data['summary'] = get_leads_summary();
+        $data['summary']       = get_leads_summary();
 
         echo $this->load->view('admin/leads/kan-ban', $data, true);
     }
@@ -159,12 +162,12 @@ class Leads extends AdminController
                 $data['consents'] = $this->gdpr_model->get_consents(['lead_id' => $lead->id]);
             }
 
-            $leadProfileBadges = new LeadProfileBadges($id);
-            $data['total_reminders'] = $leadProfileBadges->getCount('reminders');
-            $data['total_notes'] = $leadProfileBadges->getCount('notes');
+            $leadProfileBadges         = new LeadProfileBadges($id);
+            $data['total_reminders']   = $leadProfileBadges->getCount('reminders');
+            $data['total_notes']       = $leadProfileBadges->getCount('notes');
             $data['total_attachments'] = $leadProfileBadges->getCount('attachments');
-            $data['total_tasks'] = $leadProfileBadges->getCount('tasks');
-            $data['total_proposals'] = $leadProfileBadges->getCount('proposals');
+            $data['total_tasks']       = $leadProfileBadges->getCount('tasks');
+            $data['total_proposals']   = $leadProfileBadges->getCount('proposals');
         }
 
 
@@ -648,9 +651,9 @@ class Leads extends AdminController
             ajax_access_denied();
         }
         echo json_encode([
-            'success' => $this->leads_model->delete_lead_attachment($id),
+            'success'  => $this->leads_model->delete_lead_attachment($id),
             'leadView' => $this->_get_lead_data($lead_id),
-            'id' => $lead_id
+            'id'       => $lead_id,
         ]);
     }
 
@@ -660,9 +663,9 @@ class Leads extends AdminController
             ajax_access_denied();
         }
         echo json_encode([
-            'success' => $this->misc_model->delete_note($id),
+            'success'  => $this->misc_model->delete_note($id),
             'leadView' => $this->_get_lead_data($lead_id),
-            'id' => $lead_id
+            'id'       => $lead_id,
         ]);
     }
 
@@ -1085,17 +1088,17 @@ class Leads extends AdminController
 
     public function email_integration_folders()
     {
-       if (!is_admin()) {
+        if (!is_admin()) {
             ajax_access_denied('Leads Test Email Integration');
         }
 
         app_check_imap_open_function();
 
         $imap = new Imap(
-           $this->input->post('email'),
-           $this->input->post('password', false),
-           $this->input->post('imap_server'),
-           $this->input->post('encryption')
+            $this->input->post('email'),
+            $this->input->post('password', false),
+            $this->input->post('imap_server'),
+            $this->input->post('encryption')
         );
 
         try {
@@ -1125,10 +1128,10 @@ class Leads extends AdminController
         }
 
         $imap = new Imap(
-           $mail->email,
-           $this->encryption->decrypt($password),
-           $mail->imap_server,
-           $mail->encryption
+            $mail->email,
+            $this->encryption->decrypt($password),
+            $mail->imap_server,
+            $mail->encryption
         );
 
         try {
@@ -1179,8 +1182,8 @@ class Leads extends AdminController
             'is_not_staff' => 0,
         ]);
 
-        $data['title']      = _l('leads_email_integration');
-        $data['mail']       = $this->leads_model->get_email_integration();
+        $data['title'] = _l('leads_email_integration');
+        $data['mail']  = $this->leads_model->get_email_integration();
 
         $data['bodyclass'] = 'leads-email-integration';
         $this->load->view('admin/leads/email_integration', $data);

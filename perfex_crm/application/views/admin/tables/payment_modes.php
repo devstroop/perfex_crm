@@ -9,7 +9,7 @@ $aColumns = [
     'active',
     ];
 $sIndexColumn = 'id';
-$sTable       = db_prefix().'payment_modes';
+$sTable       = db_prefix() . 'payment_modes';
 
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [], [
     'expenses_only',
@@ -43,7 +43,7 @@ foreach ($rResult as $aRow) {
         $row[] = $_data;
     }
 
-    $options = icon_btn('#' . $aRow['id'], 'pencil-square-o', 'btn-default', [
+    $options = icon_btn('#' . $aRow['id'], 'fa-regular fa-pen-to-square', 'btn-default', [
         'data-toggle'           => 'modal',
         'data-target'           => '#payment_mode_modal',
         'data-id'               => $aRow['id'],
@@ -52,7 +52,7 @@ foreach ($rResult as $aRow) {
         'data-show-on-pdf'      => $aRow['show_on_pdf'],
         'data-default-selected' => $aRow['selected_by_default'],
         ]);
-    $row[] = $options .= icon_btn('paymentmodes/delete/' . $aRow['id'], 'remove', 'btn-danger _delete');
+    $row[] = $options .= icon_btn('paymentmodes/delete/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
 
     $output['aaData'][] = $row;
 }

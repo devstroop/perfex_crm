@@ -150,11 +150,11 @@ class Contracts_model extends App_Model
     {
         $affectedRows = 0;
 
-        if(isset($data['datestart'])) {
+        if (isset($data['datestart'])) {
             $data['datestart'] = to_sql_date($data['datestart']);
         }
 
-        if(isset($data['dateend'])) {
+        if (isset($data['dateend'])) {
             $data['dateend'] = $data['dateend'] == '' ? null : to_sql_date($data['dateend']);
         }
 
@@ -371,8 +371,8 @@ class Contracts_model extends App_Model
 
         $newContactData['trash']            = 0;
         $newContactData['isexpirynotified'] = 0;
-        $newContactData['isexpirynotified'] = 0;
         $newContactData['signed']           = 0;
+        $newContactData['marked_as_signed'] = 0;
         $newContactData['signature']        = null;
 
         $newContactData = array_merge($newContactData, get_acceptance_info_array(true));
@@ -452,6 +452,8 @@ class Contracts_model extends App_Model
             delete_tracked_emails($id, 'contract');
 
             log_activity('Contract Deleted [' . $id . ']');
+
+            hooks()->do_action('after_contract_deleted', $id);
 
             return true;
         }
@@ -594,7 +596,7 @@ class Contracts_model extends App_Model
 
         $contract = $this->get($data['contractid']);
 
-        if($keepSignature) {
+        if ($keepSignature) {
             $data['new_value'] = $contract->contract_value;
         }
 

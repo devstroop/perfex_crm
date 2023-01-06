@@ -26,7 +26,7 @@ function html_purify($content)
     $config->set('HTML.DefinitionRev', $CI->config->item('migration_version'));
 
     // Disables cache
-    if(ENVIRONMENT !== 'production'){
+    if (ENVIRONMENT !== 'production') {
         $config->set('Cache.DefinitionImpl', null);
     }
 
@@ -49,7 +49,6 @@ function html_purify($content)
     $def = $config->maybeGetRawHTMLDefinition();
 
     if ($def) {
-
         $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
         $def->addAttribute('p', 'pagebreak', 'Text');
         $def->addAttribute('div', 'align', 'Enum#left,right,center');
@@ -90,7 +89,7 @@ function html_purify($content)
  */
 function clear_textarea_breaks($text, $replace = '')
 {
-    if(empty($text)) {
+    if (empty($text)) {
         return $text;
     }
 
@@ -187,7 +186,8 @@ function app_external_form_footer($form)
 
     $date_format = $date_format[0];
 
-    $locale_key = get_locale_key($form->language);
+    $GLOBALS['locale'] = get_locale_key($form->language);
+    $locale_key        = $GLOBALS['locale'];
 
     $assetsGroup = 'external-form';
 
@@ -209,30 +209,32 @@ function app_external_form_footer($form)
 
     $CI->app_scripts->add('common-js', 'assets/builds/common.js', $assetsGroup); ?>
 
-    <script>
-       var app = {};
-       app.options = {};
-       app.lang = {};
-       app.options.date_format = '<?php echo $date_format; ?>';
-       app.options.time_format = '<?php echo get_option('time_format'); ?>';
-       app.options.calendar_first_day = '<?php echo get_option('calendar_first_day '); ?>';
-       app.lang.file_exceeds_max_filesize = "<?php echo _l('ticket_form_validation_file_size', bytesToSize('', file_upload_max_size())); ?>";
-       app.lang.validation_extension_not_allowed = "<?php echo _l('validation_extension_not_allowed'); ?>";
-   </script>
+<script>
+var app = {};
+app.options = {};
+app.lang = {};
+app.locale = "<?php echo $locale_key; ?>";
+app.options.date_format = '<?php echo $date_format; ?>';
+app.options.time_format = '<?php echo get_option('time_format'); ?>';
+app.options.calendar_first_day = '<?php echo get_option('calendar_first_day '); ?>';
+app.lang.file_exceeds_max_filesize =
+    "<?php echo _l('ticket_form_validation_file_size', bytesToSize('', file_upload_max_size())); ?>";
+app.lang.validation_extension_not_allowed = "<?php echo _l('validation_extension_not_allowed'); ?>";
+</script>
 
-   <?php echo app_compile_scripts($assetsGroup); ?>
+<?php echo app_compile_scripts($assetsGroup); ?>
 
-   <script>
-    $(function(){
+<script>
+$(function() {
 
-        $('body').tooltip({
-             selector: '[data-toggle="tooltip"]'
-        });
-
-        appColorPicker();
-        appDatepicker();
-        appSelectPicker($('select'));
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
     });
+
+    appColorPicker();
+    appDatepicker();
+    appSelectPicker($('select'));
+});
 </script>
 <?php
 }
@@ -251,17 +253,26 @@ function app_external_form_header($form)
 
     $CI->app_css->add('reset-css', 'assets/css/reset.min.css', $assetsGroup);
 
-    $CI->app_css->add('roboto-css', 'assets/plugins/roboto/roboto.css', $assetsGroup);
+    $CI->app_css->add('inter-font', 'https://rsms.me/inter/inter.css', $assetsGroup);
+
     $CI->app_css->add('bootstrap-css', 'assets/plugins/bootstrap/css/bootstrap.min.css', $assetsGroup);
 
     if (is_rtl()) {
         $CI->app_css->add('bootstrap-rtl-css', 'assets/plugins/bootstrap-arabic/css/bootstrap-arabic.min.css', $assetsGroup);
     }
 
+    $CI->app_css->add('fontawesome-css', 'assets/plugins/font-awesome/css/fontawesome.min.css', $assetsGroup);
+    $CI->app_css->add('fontawesome-brands', 'assets/plugins/font-awesome/css/brands.min.css', $assetsGroup);
+    $CI->app_css->add('fontawesome-solid', 'assets/plugins/font-awesome/css/solid.min.css', $assetsGroup);
+    $CI->app_css->add('fontawesome-regular', 'assets/plugins/font-awesome/css/regular.min.css', $assetsGroup);
+
     $CI->app_css->add('datetimepicker-css', 'assets/plugins/datetimepicker/jquery.datetimepicker.min.css', $assetsGroup);
     $CI->app_css->add('colorpicker-css', 'assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css', $assetsGroup);
-    $CI->app_css->add('fontawesome-css', 'assets/plugins/font-awesome/css/font-awesome.min.css', $assetsGroup);
+
     $CI->app_css->add('bootstrap-select-css', 'assets/plugins/bootstrap-select/css/bootstrap-select.min.css', $assetsGroup);
+
+    $CI->app_css->add('tailwind-css', base_url($CI->app_css->core_file('assets/builds', 'tailwind.css')) . '?v=' . $CI->app_css->core_version(), $assetsGroup);
+
     $CI->app_css->add('forms-css', base_url($CI->app_css->core_file('assets/css', 'forms.css')) . '?v=' . $CI->app_css->core_version(), $assetsGroup);
 
     if (file_exists(FCPATH . 'assets/css/custom.css')) {
@@ -273,13 +284,13 @@ function app_external_form_header($form)
     if (show_recaptcha() && $form->recaptcha == 1) {
         echo "<script src='https://www.google.com/recaptcha/api.js'></script>" . PHP_EOL;
     } ?>
-    <script>
-        var cfh_popover_templates = {};
-        window.addEventListener('load',function(){
-            custom_fields_hyperlink();
-        });
-    </script>
-    <?php
+<script>
+var cfh_popover_templates = {};
+window.addEventListener('load', function() {
+    custom_fields_hyperlink();
+});
+</script>
+<?php
     echo get_custom_fields_hyperlink_js_function();
     hooks()->do_action('app_external_form_head');
 }
@@ -351,12 +362,12 @@ function _inject_no_index()
 /**
  * Generate small icon button / font awesome
  * @param  string $url        href url
- * @param  string $type       icon type
+ * @param  string $icon       icon
  * @param  string $class      button class
  * @param  array  $attributes additional attributes
  * @return string
  */
-function icon_btn($url = '', $type = '', $class = 'btn-default', $attributes = [])
+function icon_btn($url = '', $icon = '', $class = 'btn-default', $attributes = [])
 {
     $_url = '#';
     if (_startsWith($url, 'http')) {
@@ -366,7 +377,7 @@ function icon_btn($url = '', $type = '', $class = 'btn-default', $attributes = [
     }
 
     return '<a href="' . $_url . '" class="btn ' . $class . ' btn-icon"' . _attributes_to_string($attributes) . '>
-    <i class="fa fa-' . $type . '"></i>
+    <i class="' . $icon . '"></i>
     </a>';
 }
 

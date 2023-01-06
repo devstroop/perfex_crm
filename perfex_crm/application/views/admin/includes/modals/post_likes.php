@@ -17,7 +17,7 @@
 
       </div>
       <div class="modal-footer">
-         <a href="#" class="btn btn-info load_more_post_likes"><?php echo _l('load_more'); ?></a>
+         <a href="#" class="btn btn-primary load_more_post_likes"><?php echo _l('load_more'); ?></a>
       </div>
     </div>
   </div>

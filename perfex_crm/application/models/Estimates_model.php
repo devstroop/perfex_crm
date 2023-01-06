@@ -1066,6 +1066,8 @@ class Estimates_model extends App_Model
                 log_activity('Estimates Deleted [Number: ' . $number . ']');
             }
 
+            hooks()->do_action('after_estimate_deleted', $id);
+
             return true;
         }
 

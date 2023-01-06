@@ -56,9 +56,10 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
         foreach ($CI->input->post('order') as $key => $val) {
             $columnName = $aColumns[intval($__post['order'][$key]['column'])];
             $dir        = strtoupper($__post['order'][$key]['dir']);
+            $type       = $__post['order'][$key]['type'] ?? null;
 
             // Security
-            if(!in_array($dir, ['ASC','DESC'])) {
+            if (!in_array($dir, ['ASC', 'DESC'])) {
                 $dir = 'ASC';
             }
 
@@ -75,13 +76,25 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = [], $where 
                 ) {
                 $sOrder .= $columnName . ' IS NULL ' . $dir . ', ' . $columnName;
             } else {
-                $sOrder .= hooks()->apply_filters('datatables_query_order_column', $columnName, $sTable);
+                // Custom fields sorting support for number type custom fields
+                if ($type === 'number') {
+                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as SIGNED)', $sTable);
+                } elseif ($type === 'date_picker') {
+                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as DATE)', $sTable);
+                } elseif ($type === 'date_picker_time') {
+                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', 'CAST(' . $columnName . ' as DATETIME)', $sTable);
+                } else {
+                    $sOrder .= hooks()->apply_filters('datatables_query_order_column', $columnName, $sTable);
+                }
             }
+
             $sOrder .= ' ' . $dir . ', ';
         }
+
         if (trim($sOrder) == 'ORDER BY') {
             $sOrder = '';
         }
+
         $sOrder = rtrim($sOrder, ', ');
 
         if (get_option('save_last_order_for_tables') == '1'

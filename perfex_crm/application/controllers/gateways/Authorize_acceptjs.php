@@ -102,91 +102,94 @@ class Authorize_acceptjs extends App_Controller
     protected function get_html($data = [])
     {
         ob_start(); ?>
-        <?php echo payment_gateway_head(_l('payment_for_invoice') . ' ' . format_invoice_number($data['invoice']->id)); ?>
-        <script type="text/javascript"
-           src="https://<?php echo $data['testMode'] ? 'jstest' : 'js'; ?>.authorize.net/v3/AcceptUI.js"
-           charset="utf-8"></script>
-        <script type="text/javascript"
-           src="https://<?php echo $data['testMode'] ? 'jstest' : 'js'; ?>.authorize.net/v1/Accept.js"
-           charset="utf-8"></script>
-        <body class="gateway-authorize-aim">
-           <div class="container">
-              <div class="col-md-8 col-md-offset-2 mtop30">
-                 <div class="mbot30 text-center">
-                    <?php echo payment_gateway_logo(); ?>
-                 </div>
-                 <div class="row">
-                    <div class="panel_s">
-                       <div class="panel-body">
-                          <h4 class="no-margin">
-                             <?php echo _l('payment_for_invoice'); ?> <a href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>"><?php echo format_invoice_number($data['invoice']->id); ?></a>
-                          </h4>
-                          <hr />
-                          <h4 class="mbot20">
-                             <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
-                          </h4>
-                          <div id="errors" class="alert alert-danger" style="display:none;"></div>
-                          <?php echo form_open(site_url('gateways/authorize_acceptjs/capture'), ['id' => 'paymentForm']); ?>
-                          <?php echo form_hidden('invoiceid', $data['invoice']->id); ?>
-                          <input type="hidden" name="dataValue" id="dataValue" />
-                          <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
-                          <input type="hidden" name="firstName" id="firstName" />
-                          <input type="hidden" name="lastName" id="lastName" />
-                          <button type="button"
-                             class="AcceptUI btn btn-info"
-                             id="payNowButton"
-                             data-billingAddressOptions='{"show":true, "required":false}'
-                             data-apiLoginID="<?php echo $this->authorize_acceptjs_gateway->getSetting('api_login_id'); ?>"
-                             data-clientKey="<?php echo $this->authorize_acceptjs_gateway->getSetting('public_key'); ?>"
-                             data-acceptUIFormBtnTxt="Pay Now"
-                             data-acceptUIFormHeaderTxt="Card Information"
-                             data-responseHandler="responseHandler">
-                          <?php echo _l('invoice_html_online_payment_button_text'); ?>
-                          </button>
-                          </form>
-                       </div>
+<?php echo payment_gateway_head(_l('payment_for_invoice') . ' ' . format_invoice_number($data['invoice']->id)); ?>
+<script type="text/javascript"
+    src="https://<?php echo $data['testMode'] ? 'jstest' : 'js'; ?>.authorize.net/v3/AcceptUI.js" charset="utf-8">
+</script>
+<script type="text/javascript"
+    src="https://<?php echo $data['testMode'] ? 'jstest' : 'js'; ?>.authorize.net/v1/Accept.js" charset="utf-8">
+</script>
+
+<body class="gateway-authorize-aim">
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2 mtop30">
+            <div class="mbot30 text-center">
+                <?php echo payment_gateway_logo(); ?>
+            </div>
+            <div class="row">
+                <div class="panel_s">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <?php echo _l('payment_for_invoice'); ?> -
+                            <?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?>
+                        </h4>
+                        <a
+                            href="<?php echo site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash); ?>">
+                            <?php echo format_invoice_number($data['invoice']->id); ?>
+                        </a>
                     </div>
-                 </div>
-              </div>
-           </div>
-           <?php echo payment_gateway_scripts(); ?>
-           <?php echo payment_gateway_footer(); ?>
-           <script type="text/javascript">
-              $(function(){
-                setTimeout(function(){
-                   $('#payNowButton').click();
-                }, 500)
-              })
+                    <div class="panel-body">
+                        <div id="errors" class="alert alert-danger" style="display:none;"></div>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <?php echo form_open(site_url('gateways/authorize_acceptjs/capture'), ['id' => 'paymentForm']); ?>
+                        <?php echo form_hidden('invoiceid', $data['invoice']->id); ?>
+                        <input type="hidden" name="dataValue" id="dataValue" />
+                        <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
+                        <input type="hidden" name="firstName" id="firstName" />
+                        <input type="hidden" name="lastName" id="lastName" />
+                        <button type="button" class="AcceptUI btn btn-primary" id="payNowButton"
+                            data-billingAddressOptions='{"show":true, "required":false}'
+                            data-apiLoginID="<?php echo $this->authorize_acceptjs_gateway->getSetting('api_login_id'); ?>"
+                            data-clientKey="<?php echo $this->authorize_acceptjs_gateway->getSetting('public_key'); ?>"
+                            data-acceptUIFormBtnTxt="Pay Now" data-acceptUIFormHeaderTxt="Card Information"
+                            data-responseHandler="responseHandler">
+                            <?php echo _l('invoice_html_online_payment_button_text'); ?>
+                        </button>
+                        <?php echo form_close(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php echo payment_gateway_scripts(); ?>
+    <?php echo payment_gateway_footer(); ?>
+    <script type="text/javascript">
+    $(function() {
+        setTimeout(function() {
+            $('#payNowButton').click();
+        }, 500)
+    })
 
-              function responseHandler(response) {
-                  var errorsElement = document.getElementById('errors');
-                  if (response.messages.resultCode === "Error") {
-                    errorsElement.style.display = 'block';
-                      var i = 0;
+    function responseHandler(response) {
+        var errorsElement = document.getElementById('errors');
+        if (response.messages.resultCode === "Error") {
+            errorsElement.style.display = 'block';
+            var i = 0;
 
-                      while (i < response.messages.message.length) {
-                          errorsElement.innerHTML = '<p>' +response.messages.message[i].code + ": " +
-                                response.messages.message[i].text + '</p>';
-                          i = i + 1;
-                      }
-                  } else {
-                    errorsElement.innerHTML = '';
-                    errorsElement.style.display = 'none';
+            while (i < response.messages.message.length) {
+                errorsElement.innerHTML = '<p>' + response.messages.message[i].code + ": " +
+                    response.messages.message[i].text + '</p>';
+                i = i + 1;
+            }
+        } else {
+            errorsElement.innerHTML = '';
+            errorsElement.style.display = 'none';
 
-                      paymentFormUpdate(response);
-                  }
-              }
+            paymentFormUpdate(response);
+        }
+    }
 
-              function paymentFormUpdate(response) {
-                  document.getElementById("dataDescriptor").value = response.opaqueData.dataDescriptor;
-                  document.getElementById("dataValue").value = response.opaqueData.dataValue;
-                  document.getElementById("firstName").value = response.customerInformation.firstName;
-                  document.getElementById("lastName").value = response.customerInformation.lastName;
+    function paymentFormUpdate(response) {
+        document.getElementById("dataDescriptor").value = response.opaqueData.dataDescriptor;
+        document.getElementById("dataValue").value = response.opaqueData.dataValue;
+        document.getElementById("firstName").value = response.customerInformation.firstName;
+        document.getElementById("lastName").value = response.customerInformation.lastName;
 
-                  document.getElementById("paymentForm").submit();
-              }
-           </script>
-           <?php
+        document.getElementById("paymentForm").submit();
+    }
+    </script>
+    <?php
            $contents = ob_get_contents();
         ob_end_clean();
 

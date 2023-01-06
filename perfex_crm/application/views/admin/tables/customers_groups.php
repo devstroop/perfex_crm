@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $aColumns = ['name'];
 
 $sIndexColumn = 'id';
-$sTable       = db_prefix().'customers_groups';
+$sTable       = db_prefix() . 'customers_groups';
 
 $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [], ['id']);
 $output  = $result['output'];
@@ -18,8 +18,8 @@ foreach ($rResult as $aRow) {
 
         $row[] = $_data;
     }
-    $options = icon_btn('#', 'pencil-square-o', 'btn-default', ['data-toggle' => 'modal', 'data-target' => '#customer_group_modal', 'data-id' => $aRow['id']]);
-    $row[]   = $options .= icon_btn('clients/delete_group/' . $aRow['id'], 'remove', 'btn-danger _delete');
+    $options = icon_btn('#', 'fa-regular fa-pen-to-square', 'btn-default', ['data-toggle' => 'modal', 'data-target' => '#customer_group_modal', 'data-id' => $aRow['id']]);
+    $row[]   = $options .= icon_btn('clients/delete_group/' . $aRow['id'], 'fa fa-remove', 'btn-danger _delete');
 
     $output['aaData'][] = $row;
 }

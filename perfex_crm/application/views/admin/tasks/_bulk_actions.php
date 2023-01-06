@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
-<div class="modal fade bulk_actions" id="tasks_bulk_actions" tabindex="-1" role="dialog" data-table="<?php echo (isset($table) ? $table : '.table-tasks'); ?>">
+<div class="modal fade bulk_actions" id="tasks_bulk_actions" tabindex="-1" role="dialog" data-table="<?php echo(isset($table) ? $table : '.table-tasks'); ?>">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
@@ -8,7 +8,7 @@
          </div>
          <div class="modal-body">
 
-            <?php if(has_permission('tasks','','delete')){ ?>
+            <?php if (has_permission('tasks', '', 'delete')) { ?>
                <div class="checkbox checkbox-danger">
                   <input type="checkbox" name="mass_delete" id="mass_delete">
                   <label for="mass_delete"><?php echo _l('mass_delete'); ?></label>
@@ -20,12 +20,12 @@
                   <label for="move_to_status_tasks_bulk_action"><?php echo _l('task_status'); ?></label>
                   <select name="move_to_status_tasks_bulk_action" id="move_to_status_tasks_bulk_action" data-width="100%" class="selectpicker" data-none-selected-text="<?php echo _l('task_status'); ?>">
                      <option value=""></option>
-                     <?php foreach($task_statuses as $status){ ?>
+                     <?php foreach ($task_statuses as $status) { ?>
                         <option value="<?php echo $status['id']; ?>"><?php echo $status['name']; ?></option>
                      <?php } ?>
                   </select>
                </div>
-               <?php if(has_permission('tasks','','edit')){ ?>
+               <?php if (has_permission('tasks', '', 'edit')) { ?>
 
                   <div class="form-group">
                      <label for="task_bulk_priority" class="control-label"><?php echo _l('task_add_edit_priority'); ?></label>
@@ -38,15 +38,15 @@
                      </select>
                   </div>
                   <?php
-                  echo '<i class="fa fa-question-circle" data-toggle="tooltip" data-title="'._l('tasks_bull_actions_assign_notice').'"></i>';
-                  $staff_bulk_assigned = $this->staff_model->get('', ['active'=>1]);
-                  echo render_select('task_bulk_assignees',$staff_bulk_assigned,array('staffid',array('firstname','lastname')),'task_assigned','',array('multiple'=>true));
-                  if(isset($project)){
-                    echo render_select('task_bulk_milestone', $this->projects_model->get_milestones($project->id), array(
+                  echo '<i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="' . _l('tasks_bull_actions_assign_notice') . '"></i>';
+                  $staff_bulk_assigned = $this->staff_model->get('', ['active' => 1]);
+                  echo render_select('task_bulk_assignees', $staff_bulk_assigned, ['staffid', ['firstname', 'lastname']], 'task_assigned', '', ['multiple' => true]);
+                  if (isset($project)) {
+                      echo render_select('task_bulk_milestone', $this->projects_model->get_milestones($project->id), [
                       'id',
-                      'name'
-                   ), 'task_milestone');
-                } ?>
+                      'name',
+                   ], 'task_milestone');
+                  } ?>
 
                 <div class="form-group">
                  <label for="task_bulk_billable" class="control-label"><?php echo _l('task_billable'); ?></label>
@@ -67,7 +67,7 @@
       </div>
       <div class="modal-footer">
          <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-         <a href="#" class="btn btn-info" onclick="tasks_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
+         <a href="#" class="btn btn-primary" onclick="tasks_bulk_action(this); return false;"><?php echo _l('confirm'); ?></a>
       </div>
    </div>
    <!-- /.modal-content -->

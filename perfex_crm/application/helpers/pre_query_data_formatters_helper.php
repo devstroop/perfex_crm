@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-hooks()->add_filter('before_invoice_updated', '_format_data_sales_feature');
+hooks()->add_filter('before_update_invoice', '_format_data_sales_feature');
 hooks()->add_filter('before_invoice_added', '_format_data_sales_feature');
 
 hooks()->add_filter('before_estimate_updated', '_format_data_sales_feature');

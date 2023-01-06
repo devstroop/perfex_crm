@@ -45,6 +45,8 @@ function payment_gateway_head($title = 'Payment for Invoice')
 
     add_favicon_link_asset(PAYMENT_GATEWAYS_ASSETS_GROUP);
 
+    $CI->app_css->add('inter-font', 'https://rsms.me/inter/inter.css', PAYMENT_GATEWAYS_ASSETS_GROUP);
+
     $CI->app_css->add(
         'reset-css',
         base_url($CI->app_css->core_file('assets/css', 'reset.css')) . '?v=' . $CI->app_css->core_version(),
@@ -52,13 +54,8 @@ function payment_gateway_head($title = 'Payment for Invoice')
     );
 
     $CI->app_css->add('bootstrap-css', 'assets/plugins/bootstrap/css/bootstrap.min.css', PAYMENT_GATEWAYS_ASSETS_GROUP);
-    $CI->app_css->add('roboto-css', 'assets/plugins/roboto/roboto.css', PAYMENT_GATEWAYS_ASSETS_GROUP);
 
-    $CI->app_css->add(
-        'bootstrap-overrides-css',
-        base_url($CI->app_scripts->core_file('assets/css', 'bs-overides.css')) . '?v=' . $CI->app_css->core_version(),
-        PAYMENT_GATEWAYS_ASSETS_GROUP
-    );
+    $CI->app_css->add('tailwind-css', base_url($CI->app_css->core_file('assets/builds', 'tailwind.css')) . '?v=' . $CI->app_css->core_version(), PAYMENT_GATEWAYS_ASSETS_GROUP, ['bootstrap-css']);
 
     $CI->app_css->add(
         'theme-css',

@@ -304,16 +304,17 @@ class Estimate_request extends AdminController
         $data['formData'] = preg_replace('/=\\\\/m', "=''", $data['formData']);
 
         $_formData  = json_decode($data['formData']);
-        $emailField = [];
+        $emailField = null;
 
         foreach ($_formData as $field) {
             if (isset($field->subtype) && $field->subtype === 'email') {
                 $emailField = $field;
+
                 break;
             }
         }
 
-        if (empty($emailField)) {
+        if (!$emailField) {
             echo json_encode([
                 'success' => false,
                 'message' => _l('estimate_request_form_email_field_is_required'),
@@ -321,28 +322,28 @@ class Estimate_request extends AdminController
             die;
         }
 
-        if (!isset($field->required) || !$field->required) {
+        if (!isset($emailField->required) || !$emailField->required) {
             echo json_encode([
                 'success' => false,
                 'message' => _l('estimate_request_form_email_field_set_to_required'),
             ]);
-        die;
+            die;
         }
 
         $this->db->where('id', $data['id']);
-        $this->db->update(db_prefix() . 'estimate_request_forms', [
+        $this->db->update('estimate_request_forms', [
             'form_data' => $data['formData'],
         ]);
+
         if ($this->db->affected_rows() > 0) {
-            echo json_encode([
+            $response = [
                 'success' => true,
                 'message' => _l('updated_successfully', _l('estimate_request_form')),
-            ]);
+           ];
         } else {
-            echo json_encode([
-                'success' => false,
-            ]);
+            $response = ['success' => false];
         }
+        echo json_encode($response);
     }
 
     public function form($id = '')

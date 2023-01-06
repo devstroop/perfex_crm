@@ -51,8 +51,21 @@ if ($this->ci->input->post('trash')) {
     array_push($filter, 'AND trash = 1');
 }
 
+
+if ($this->ci->input->post('signed')) {
+    array_push($filter, 'AND signed = 1');
+}
+
+if ($this->ci->input->post('marked_signed')) {
+    array_push($filter, 'AND marked_as_signed = 1');
+}
+
+if ($this->ci->input->post('not_expired')) {
+    array_push($filter, 'AND dateend IS NOT NULL AND dateend > "' . date('Y-m-d') . '" and trash = 0');
+}
+
 if ($this->ci->input->post('expired')) {
-    array_push($filter, 'AND dateend IS NOT NULL AND dateend <"' . date('Y-m-d') . '" and trash = 0');
+    array_push($filter, 'AND dateend IS NOT NULL AND dateend < "' . date('Y-m-d') . '" and trash = 0');
 }
 
 if ($this->ci->input->post('without_dateend')) {
@@ -167,10 +180,10 @@ foreach ($rResult as $aRow) {
         $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);
     }
 
-    if (!empty($aRow['dateend'])) {
+    if (!empty($aRow['dateend']) && $aRow['marked_as_signed'] == 0 && empty($aRow['signature'])) {
         $_date_end = date('Y-m-d', strtotime($aRow['dateend']));
         if ($_date_end < date('Y-m-d')) {
-            $row['DT_RowClass'] = 'alert-danger';
+            $row['DT_RowClass'] = 'danger';
         }
     }
 

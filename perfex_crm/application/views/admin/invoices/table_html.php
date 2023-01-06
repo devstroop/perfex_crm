@@ -19,7 +19,10 @@ $table_data = array(
   _l('invoice_dt_table_heading_status'));
 $custom_fields = get_custom_fields('invoice',array('show_on_table'=>1));
 foreach($custom_fields as $field){
-  array_push($table_data,$field['name']);
+  array_push($table_data, [
+   'name' => $field['name'],
+   'th_attrs' => array('data-type'=>$field['type'], 'data-custom-field'=>1)
+ ]);
 }
 $table_data = hooks()->apply_filters('invoices_table_columns', $table_data);
 render_datatable($table_data, (isset($class) ? $class : 'invoices'));

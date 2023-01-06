@@ -4,24 +4,24 @@
     <div class="content">
         <div class="row">
             <div class="col-md-12">
+                <?php if (count($years) > 1 || (count($years) == 1 && $years[0] != date('Y'))) {
+    ?>
+                <select class="selectpicker tw-mb-4" name="expense_year"
+                    onchange="change_expense_report_year(this.value);"
+                    data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
+                    <?php foreach ($years as $year) {
+        ?>
+                    <option value="<?php echo $year; ?>" <?php echo $year == $report_year ? 'selected' : ''; ?>>
+                        <?php echo $year; ?>
+                    </option>
+                    <?php
+    } ?>
+                </select>
+                <?php
+} ?>
                 <div class="panel_s">
                     <div class="panel-body">
-                        <?php if (count($years) > 1 || (count($years) == 1 && $years[0] != date('Y'))) {
-    ?>
-                        <select class="selectpicker" name="expense_year" onchange="change_expense_report_year(this.value);" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
-                            <?php foreach ($years as $year) {
-        ?>
-                            <option value="<?php echo $year; ?>"<?php if ($year == $report_year) {
-            echo ' selected';
-        } ?>>
-                                <?php echo $year; ?>
-                            </option>
-                            <?php
-    } ?>
-                        </select>
-                        <hr />
-                        <?php
-} ?>
+
                         <p class="text-danger bold">
                             <?php echo _l('amount_display_in_base_currency'); ?>
                         </p>
@@ -36,13 +36,13 @@
 </div>
 <?php init_tail(); ?>
 <script>
-    $(function(){
-        init_currency(<?php echo $base_currency->id; ?>, function(){
-          chartExpenseVsIncome = new Chart($('#report-expense-vs-income'), {
+$(function() {
+    init_currency(<?php echo $base_currency->id; ?>, function() {
+        chartExpenseVsIncome = new Chart($('#report-expense-vs-income'), {
             type: 'bar',
             data: <?php echo $chart_expenses_vs_income_values; ?>,
-            options:{
-                maintainAspectRatio:false,
+            options: {
+                maintainAspectRatio: false,
                 tooltips: {
                     callbacks: {
                         label: function(tooltipItem, data) {
@@ -52,20 +52,23 @@
                 },
                 scales: {
                     yAxes: [{
-                      ticks: {
-                        callback: function (value) {
-                            return format_money(value)
-                        },
-                        beginAtZero: true,
-                    }
-                }]
-            },}
+                        ticks: {
+                            callback: function(value) {
+                                return format_money(value)
+                            },
+                            beginAtZero: true,
+                        }
+                    }]
+                },
+            }
         });
-      });
     });
-    function change_expense_report_year(year){
-        window.location.href = admin_url+'reports/expenses_vs_income/'+year;
-    }
+});
+
+function change_expense_report_year(year) {
+    window.location.href = admin_url + 'reports/expenses_vs_income/' + year;
+}
 </script>
 </body>
+
 </html>

@@ -1,5 +1,7 @@
 <?php
 
+use app\services\utilities\Str;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard extends AdminController
@@ -81,7 +83,6 @@ class Dashboard extends AdminController
         $data['tickets_report'] = [];
         if (is_admin()) {
             $data['tickets_report'] = (new \app\services\TicketsReportByStaff())->filterBy('this_month');
-
         }
 
         $data = hooks()->apply_filters('before_dashboard_render', $data);
