@@ -18,6 +18,7 @@ jobs:
         script: |
           cd /var/www/html
           rm -rf *
+          chmod 777 ./
           git init
           git remote add origin https://devstroop:{{ secrets.GIT_TOKEN }}@github.com/devstroop/perfex_crm.git
           git pull
