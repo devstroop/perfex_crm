@@ -15,7 +15,7 @@ jobs:
       with:
         php-version: '8.0'
 
-    - name: Predeploy dependencies
+    - name: Installing dependencies
       run: composer install --no-dev
 
     - name: Upload
