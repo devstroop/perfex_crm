@@ -3,7 +3,7 @@ name: Deploy PHP App
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
